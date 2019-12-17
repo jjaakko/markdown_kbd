@@ -1,0 +1,120 @@
+{
+  "name": "markdown-kbd",
+  "displayName": "Markdown Kbd",
+  "description": "Automatically detect key names in key name combinations and wrap them with <kbd> tags.",
+  "version": "0.1.0",
+  "publisher": "pub",
+  "license": "SEE LICENSE IN LICENSE",
+  "icon": "images/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jjaakko/markdown_kbd"
+  },
+  "engines": {
+    "vscode": "^1.41.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "markdown",
+    "key name",
+    "kbd"
+  ],
+  "galleryBanner": {
+    "color": "#EEEEEE",
+    "theme": "dark"
+  },
+  "activationEvents": [
+    "onCommand:markdownKbd.wrapWithKbdTagsInSelectedArea",
+    "onCommand:markdownKbd.wrapWithKbdTagsInActiveEditor",
+    "onCommand:markdownKbd.stripKbdTagsFromActiveEditor"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "Markdown Kbd",
+      "properties": {
+        "markdownKbd.wrapKeyNamesSeparately": {
+          "type": "boolean",
+          "default": true,
+          "description": "Wrap individual keynames separately. That is <kbd>Cmd</kbd> + <kbd>i</kbd instead of <kbd>Cmd + i</kbd>"
+        },
+        "markdownKbd.addSpacesAroundPlusSign": {
+          "type": "boolean",
+          "default": true,
+          "description": "Add one space between the keynames and the plus sign."
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "markdownKbd.wrapWithKbdTagsInSelectedArea",
+        "title": "Wrap key names in selected area with <kbd> tags.",
+        "category": "Markdown Kbd"
+      },
+      {
+        "command": "markdownKbd.wrapWithKbdTagsInActiveEditor",
+        "title": "Wrap key names in active editor with <kbd> tags.",
+        "category": "Markdown Kbd"
+      },
+      {
+        "command": "markdownKbd.stripKbdTagsFromActiveEditor",
+        "title": "Strip off <kbd> tags from active editor.",
+        "category": "Markdown Kbd"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "markdownKbd.wrapWithKbdTagsInSelectedArea",
+          "title": "%markdownKbd.wrapWithKbdTagsInSelectedArea.title%",
+          "category": "Markdown Kbd",
+          "when": "editorLangId == markdown"
+        },
+        {
+          "command": "markdownKbd.wrapWithKbdTagsInActiveEditor",
+          "title": "%markdownKbd.wrapWithKbdTagsInActiveEditor.title%",
+          "category": "Markdown Kbd",
+          "when": "editorLangId == markdown"
+        },
+        {
+          "command": "markdownKbd.stripKbdTagsFromActiveEditor",
+          "title": "%markdownKbd.stripKbdTagsFromActiveEditor.title%",
+          "category": "Markdown Kbd",
+          "when": "editorLangId == markdown"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "compile": "rm -r out && tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile",
+    "test": "node ./out/test/runTest.js",
+    "unit-test": "mocha --ui tdd out/test/unit/*.test.js",
+    "vscode:prepublish": "webpack --mode production",
+    "webpack": "webpack --mode development",
+    "webpack-dev": "webpack --mode development --watch",
+    "test-compile": "tsc -p ./"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.7",
+    "@types/glob": "^7.1.1",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^12.11.7",
+    "@types/vscode": "^1.41.0",
+    "chai": "^4.2.0",
+    "glob": "^7.1.5",
+    "mocha": "^6.2.2",
+    "ts-loader": "^6.2.1",
+    "tslint": "^5.20.0",
+    "typescript": "^3.6.4",
+    "vscode-test": "^1.2.2",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10"
+  },
+  "dependencies": {
+    "lodash": "^4.17.15"
+  }
+}

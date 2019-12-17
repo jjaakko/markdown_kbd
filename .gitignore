@@ -1,0 +1,8 @@
+out
+node_modules
+dist
+.vscode-test/
+.vscode/settings.json
+*.vsix
+.DS_Store
+.python-version
