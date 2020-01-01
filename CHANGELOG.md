@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.1.1] - 2020-01-01
+
+- Changed galleryBanner theme.
+
 ## [0.1.0] - 2020-01-01
 
 - Added support for wrapping key name combinations with \<kbd> tags in markdown files.
