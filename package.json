@@ -23,7 +23,7 @@
   ],
   "galleryBanner": {
     "color": "#EEEEEE",
-    "theme": "dark"
+    "theme": "light"
   },
   "activationEvents": [
     "onCommand:markdownKbd.wrapWithKbdTagsInSelectedArea",
