@@ -4,5 +4,6 @@ dist
 .vscode-test/
 .vscode/settings.json
 *.vsix
+LOG.md
 .DS_Store
 .python-version

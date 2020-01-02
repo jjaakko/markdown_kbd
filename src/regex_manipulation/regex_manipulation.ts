@@ -1,6 +1,12 @@
 import { startCase } from "lodash";
 import { validKeyNames } from "../validKeyNames";
 import { Config } from "../types";
+import {
+  createRegExp,
+  getRegexForMatchingKeyNamesNotYetWrapped,
+  getRegexForMatchingKeyNamesWrappedAlready
+} from "../regexPatterns";
+import { ConfigurationTarget } from "vscode";
 
 /**
  * Providing default configuration and wrap key names with kbd tags.
@@ -10,20 +16,23 @@ import { Config } from "../types";
  */
 export function wrapKeyNamesWithKbdTags(
   stringWithKeyboardStrings: string,
-  config: Config
+  config: Config,
+  getRegexForMatchingKeyNameCombinations: Function = getRegexForMatchingKeyNamesNotYetWrapped
 ): string {
   // Provide default config, which can be overridden with the actual config parameter
   const effectiveConfig: Config = Object.assign(
     {
-      wrapKeyNamesSeparately: true,
-      addSpacesAroundPlusSign: false
+      wrapKeyNamesSeparately: false,
+      addSpacesAroundPlusSign: false,
+      replaceWithIcons: true
     },
     config
   );
 
   const result = wrapKeyNamesWithKbdTags_(
     stringWithKeyboardStrings,
-    effectiveConfig
+    effectiveConfig,
+    getRegexForMatchingKeyNameCombinations
   );
   return result;
 }
@@ -36,23 +45,59 @@ export function wrapKeyNamesWithKbdTags(
  */
 export function wrapKeyNamesWithKbdTags_(
   stringWithKeyboardStrings: string,
-  { wrapKeyNamesSeparately, addSpacesAroundPlusSign }: Config
+  { wrapKeyNamesSeparately, addSpacesAroundPlusSign, replaceWithIcons }: Config,
+  getRegexForMatchingKeyNameCombinations
 ): string {
-  const pattern: RegExp = createRegExp(validKeyNames);
-
+  const pattern: RegExp = getRegexForMatchingKeyNameCombinations(validKeyNames);
+  // console.log(pattern.toString());
   const textWithKbdTags: string = stringWithKeyboardStrings.replace(
     pattern,
-    match => {
+    matchedString => {
+      // If we can't use \b we have to use this.
+      let firstChar = "";
+      let lastChar = "";
+      if (
+        matchedString.charAt(0) !== "⌘" &&
+        !matchedString.charAt(0).match(/[a-z]/i)
+      ) {
+        // First char of the first key name was not part of the key name combo, we need to
+        // prepend the result with it
+        firstChar = matchedString.charAt(0);
+      }
+      const last = matchedString.charAt(matchedString.length - 1);
+      if (last !== "⌘" && !last.match(/[a-z]/i)) {
+        // Last char of the last key name was not part of the key name combo, we need to
+        // append the result with it
+        lastChar = last;
+      }
+      const matchWithPaddingRemoved = matchedString.slice(
+        firstChar.length,
+        matchedString.length - lastChar.length
+      );
+
       // Split matched string by + character
-      const stringsSplittedByChar: string[] = match.split("+");
+      const stringsSplittedByChar: string[] = matchWithPaddingRemoved.split(
+        "+"
+      );
+
       // Wrap the elements with kbd tags
       let arrayOfKeyNames: string[] = stringsSplittedByChar.map(
         (element: string) => {
-          const trimmedElement: string = element.trim();
-          const keyNameWithCorrectCase: string =
-            trimmedElement.length > 1
-              ? startCase(trimmedElement.toLowerCase())
-              : trimmedElement.toLowerCase();
+          let replacementsDone: string = element;
+          if (replaceWithIcons) {
+            replacementsDone = element.toLowerCase().replace("cmd", "⌘");
+            replacementsDone = replacementsDone
+              .toLowerCase()
+              .replace("opt", "⌥");
+            replacementsDone = replacementsDone
+              .toLowerCase()
+              .replace("ctrl", "^");
+            replacementsDone = replacementsDone
+              .toLowerCase()
+              .replace("shift", "⇧");
+          }
+          const trimmedElement: string = replacementsDone.trim();
+          const keyNameWithCorrectCase: string = startCase(trimmedElement.toLowerCase());
           return wrapKeyNamesSeparately
             ? `<kbd>${keyNameWithCorrectCase}</kbd>`
             : keyNameWithCorrectCase;
@@ -61,47 +106,14 @@ export function wrapKeyNamesWithKbdTags_(
       // Create new string from an array, joining strings with either " + " or "+".
       const glue = addSpacesAroundPlusSign ? " + " : "+";
       let stringOfKeyNames: string = arrayOfKeyNames.join(glue);
-      return wrapKeyNamesSeparately
-        ? stringOfKeyNames
-        : `<kbd>${stringOfKeyNames}</kbd>`;
+      const keynameCombinationPlusPossiblePadding = wrapKeyNamesSeparately
+        ? firstChar + stringOfKeyNames + lastChar
+        : firstChar + `<kbd>${stringOfKeyNames}</kbd>` + lastChar;
+      return keynameCombinationPlusPossiblePadding;
     }
   );
 
   return textWithKbdTags;
-}
-
-/**
- * Creates regular expression for matching key combinations.
- *
- * @param validKeys Valid key names.
- * @returns Regular expression.
- */
-export function createRegExp(validKeys: string[]): RegExp {
-  // Helper strings for defining regular expression.
-
-  // Pattern matches strings like "cmd", "shift" or "alt".
-  const matchOneOfTheValidKeys: string = `\\b(${validKeys.join("|")})\\b`;
-
-  // Pattern matches strings like " + " or "+".
-  const plusSignWithOptionalSpaces: string = ` ?\\+ ?`;
-
-  // Pattern matches strings like "cmd", "shift" or "b".
-  const matchLetterOrOneOftheValidKeys: string = `\\b([a-z]|(${matchOneOfTheValidKeys}))\\b`;
-
-  // Pattern will match strings such as "cmd + i", "CMD + SHIFT + i", "ctrl + F12" but not
-  // single letters such as "i".
-  const pattern: RegExp = new RegExp(
-    matchOneOfTheValidKeys +
-    plusSignWithOptionalSpaces +
-    matchLetterOrOneOftheValidKeys +
-    `(` + // Start optional capturing group.
-      plusSignWithOptionalSpaces +
-      matchLetterOrOneOftheValidKeys +
-      `){0,5}`, // End optional capturing group.
-    "gi" // All the occurences are matched. Matching is case-insensitive.
-  );
-
-  return pattern;
 }
 
 /**
@@ -111,7 +123,7 @@ export function createRegExp(validKeys: string[]): RegExp {
  */
 export function stripKbdTagsFromString(stringWithKbdTags: string) {
   // Regex pattern for capturing <kbd> elements.
-  const pattern = new RegExp("<kbd>(.*?)</kbd>", "g");
+  const pattern = getRegexForMatchingKeyNamesWrappedAlready(validKeyNames);
 
   // Strip <kbd> tags from the text.
   const textWithKbdTagsRemoved = stringWithKbdTags.replace(
