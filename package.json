@@ -3,7 +3,7 @@
   "displayName": "Markdown Kbd",
   "description": "Automatically detect key names in key name combinations and wrap them with <kbd> tags.",
   "version": "0.2.0",
-  "publisher": "pub",
+  "publisher": "jjaakko",
   "license": "SEE LICENSE IN LICENSE",
   "icon": "images/icon.png",
   "repository": {
