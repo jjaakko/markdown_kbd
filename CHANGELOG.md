@@ -1,5 +1,13 @@
 # Change Log
 
+## [Unreleased]
+
+## [0.2] - 2020-01-05
+- Added prevention of nested tag structures.
+- Addded option to replace key names with icons and set it to default.
+- Added support matching patterns with unicode characters.
+- Added more documentation.
+
 ## [0.1.1] - 2020-01-01
 
 - Changed galleryBanner theme.

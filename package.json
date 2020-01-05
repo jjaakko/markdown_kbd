@@ -2,8 +2,8 @@
   "name": "markdown-kbd",
   "displayName": "Markdown Kbd",
   "description": "Automatically detect key names in key name combinations and wrap them with <kbd> tags.",
-  "version": "0.1.2",
-  "publisher": "jjaakko",
+  "version": "0.2.0",
+  "publisher": "pub",
   "license": "SEE LICENSE IN LICENSE",
   "icon": "images/icon.png",
   "repository": {
@@ -37,13 +37,18 @@
       "properties": {
         "markdownKbd.wrapKeyNamesSeparately": {
           "type": "boolean",
-          "default": true,
+          "default": false,
           "description": "Wrap individual keynames separately. That is <kbd>Cmd</kbd> + <kbd>i</kbd instead of <kbd>Cmd + i</kbd>"
         },
         "markdownKbd.addSpacesAroundPlusSign": {
           "type": "boolean",
-          "default": true,
+          "default": false,
           "description": "Add one space between the keynames and the plus sign."
+        },
+        "markdownKbd.replaceWithIcons": {
+          "type": "boolean",
+          "default": true,
+          "description": "Replace ctrl, cmd, opt and shift with icons (^, ⌘, ⌥, ⇧)."
         }
       }
     },
@@ -90,13 +95,14 @@
   "scripts": {
     "compile": "rm -r out && tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "pretest": "npm run compile",
+    "pretest": "npm run compile && npm run webpack",
     "test": "node ./out/test/runTest.js",
+    "test-compile": "tsc -p ./",
     "unit-test": "mocha --ui tdd out/test/unit/*.test.js",
+    "unit-test-c": "npm run compile && mocha --ui tdd out/test/unit/*.test.js",
     "vscode:prepublish": "webpack --mode production",
     "webpack": "webpack --mode development",
-    "webpack-dev": "webpack --mode development --watch",
-    "test-compile": "tsc -p ./"
+    "webpack-dev": "webpack --mode development --watch"
   },
   "devDependencies": {
     "@types/chai": "^4.2.7",
@@ -107,6 +113,7 @@
     "chai": "^4.2.0",
     "glob": "^7.1.5",
     "mocha": "^6.2.2",
+    "sinon": "^8.0.2",
     "ts-loader": "^6.2.1",
     "tslint": "^5.20.0",
     "typescript": "^3.6.4",
