@@ -1,62 +1,149 @@
-import * as vscode from "vscode";
-import { wrapKeyNamesWithKbdTags } from "./regex_manipulation/regex_manipulation";
 import { Config } from "./types";
+import {
+  getRegexForMatchingKeyNamesNotYetWrapped,
+  getRegexMatchingKeyNames
+} from "./regexPatterns";
+import { replaceKeynameWithIconOrViceVersa } from "./replace";
 
 /**
- * Wraps key names in active editor with <kbd> tags.
+ * Provide default configuration and wrap key names with kbd tags.
+ * @param stringWithKeyboardStrings
+ * @param config
+ * @returns Key wrapped with kbd tags.
  */
-export function wrapKeyNamesInActiveEditorWithKbdTags() {
-  // Get the active text editor.
-  let editor: vscode.TextEditor = vscode.window.activeTextEditor!;
+export function wrapKeyNamesWithKbdTags(
+  stringWithKeyboardStrings: string,
+  config: Config,
+  validKeys
+): string {
+  // Provide default config, which can be overridden with the actual config parameter
+  const effectiveConfig: Config = Object.assign(
+    {
+      wrapKeyNamesSeparately: false,
+      addSpacesAroundPlusSign: false,
+      replaceKeyNamesWithIcons: true
+    },
+    config
+  );
 
-  if (editor && editor.document.languageId === 'markdown') {
-    let document = editor.document;
-    const textInActiveEditor = document.getText();
+  const result = wrapKeyNamesWithKbdTags_(
+    stringWithKeyboardStrings,
+    effectiveConfig,
+    validKeys
+  );
 
-    const fullRange = new vscode.Range(
-      document.positionAt(0),
-      document.positionAt(textInActiveEditor.length)
-    );
-
-    let conf: unknown = vscode.workspace.getConfiguration("markdownKbd");
-    const config = conf as Config;
-    // const config: Config = {
-    //   wrapKeyNamesSeparately: vscode.workspace.getConfiguration("markdownKbd")
-    //     .wrapKeyNamesSeparately,
-    //     addSpacesAroundPlusSign: vscode.workspace.getConfiguration("markdownKbd").addSpacesAroundPlusSign
-    // };
-    const textWithKbdTags: string = wrapKeyNamesWithKbdTags(
-      textInActiveEditor,
-      config
-    );
-    editor.edit(editBuilder => {
-      editBuilder.replace(fullRange, textWithKbdTags);
-    });
-  }
+  return result;
 }
 
 /**
- * Wraps key names in selection with kbd tags.
+ * Take string and add <kbd> tags and spacing according to provided options.
+ *
+ * @param stringWithKeyboardStrings
+ * @returns Text with key names wrapped with kbd tags.
  */
-export function wrapKeyNamesInSelectionWithKbdTags() {
-  // Get the active text editor.
-  let editor: vscode.TextEditor = vscode.window.activeTextEditor!;
+export function wrapKeyNamesWithKbdTags_(
+  stringWithKeyboardStrings: string,
+  {
+    wrapKeyNamesSeparately,
+    addSpacesAroundPlusSign,
+    replaceKeyNamesWithIcons
+  }: Config,
+  validKeys
+): string {
+  // Get pattern to match strings such as ' cmd+i ' or ' cmd+i.' or '-cmd+i '.
+  // We need to match the immediate surrounding characters (or meta character such as end of line)
+  // to not match keynames in the middle of words like 'alt' in the middle of word 'halt'.
+  const pattern: RegExp = getRegexForMatchingKeyNamesNotYetWrapped(validKeys);
+  const textWithKbdTags: string = stringWithKeyboardStrings.replace(
+    pattern,
+    matchedString => {
+      // Get regex pattern for matching a key name only to match "cmd+i" from a string
+      // such as " cmd+i ".
+      const matchKeyNamesOnly = new RegExp(
+        getRegexMatchingKeyNames(validKeys),
+        "iu"
+      );
+      // What we essentially do here is replace "cmd" inside of strings like
+      // " cmd " or " cmd." and replace it with "<kbd>cmd</kbd>".
+      // Or turn " cmd +i " into " <kbd>cmd</kbd>+<kbd>i<kbd> "
+      // or "<kbd>cmd+i</kbd>" depending on settings.
+      const keynameCombinationPlusPossiblePadding = matchedString.replace(
+        matchKeyNamesOnly,
+        matchWithPaddingRemoved => {
+          // Split matched string using '+' character.
+          const stringsSplittedByChar: string[] = matchWithPaddingRemoved.split(
+            "+"
+          );
 
-  if (editor && editor.document.languageId === 'markdown') {
-    let document = editor.document;
-    let selection = editor.selection;
-    const textInSelection = document.getText(selection);
+          // Wrap the whole string or parts of it with kbd tags.
+          let arrayOfKeyNames: string[] = stringsSplittedByChar.map(
+            (element: string) => {
+              let replacementsDone: string = element.toLowerCase();
+              if (replaceKeyNamesWithIcons) {
+                // Replace 'cmd' with '⌘' for example.
+                replacementsDone = replaceKeynameWithIconOrViceVersa(
+                  element.toLowerCase(),
+                  true
+                );
+              }
 
-    let conf: unknown = vscode.workspace.getConfiguration("markdownKbd");
-    const config = conf as Config;
+              const trimmed = replacementsDone.trim();
+              // Capitalize first letter of the keyname.
+              const keyNameWithCorrectCase: string =
+                trimmed.toUpperCase().charAt(0) +
+                trimmed.slice(1).toLowerCase();
 
-    const textWithKbdTags: string = wrapKeyNamesWithKbdTags(
-      textInSelection,
-      config
-    );
+              return wrapIndividualKeynameIfSettingsSaySo(
+                wrapKeyNamesSeparately,
+                keyNameWithCorrectCase
+              );
+            }
+          );
 
-    editor.edit(editBuilder => {
-      editBuilder.replace(selection, textWithKbdTags);
-    });
-  }
+          // Create new string from an array, joining strings with either " + " or "+".
+          const glue = addSpacesAroundPlusSign ? " + " : "+";
+          let stringOfKeyNames: string = arrayOfKeyNames.join(glue);
+
+          return wrapKeyNameCombinationIfSettingsSaySo(
+            wrapKeyNamesSeparately,
+            stringOfKeyNames
+          );
+        }
+      );
+
+      return keynameCombinationPlusPossiblePadding;
+    }
+  );
+
+  return textWithKbdTags;
+}
+
+/**
+ * Wrap individual keyname with kbd tags if settings indicate it should be done.
+ * @param wrapKeyNamesSeparately Setting indicating whether to wrap individual keynames.
+ * @param individualKeyName Individual keyname, such as 'ctrl' or 'esc'.
+ */
+function wrapIndividualKeynameIfSettingsSaySo(
+  wrapKeyNamesSeparately: boolean,
+  individualKeyName: string
+): string {
+  const result: string = wrapKeyNamesSeparately
+    ? `<kbd>${individualKeyName}</kbd>`
+    : individualKeyName;
+  return result;
+}
+
+/**
+ * Wrap the whole keyname combination with kbd tags if settings indicate it should be done.
+ * @param wrapKeyNamesSeparately Setting indicating whether to wrap individual keynames.
+ * @param stringOfKeyNames Keyname combination, such as 'ctrl+i' or 'esc'.
+ */
+function wrapKeyNameCombinationIfSettingsSaySo(
+  wrapKeyNamesSeparately: boolean,
+  stringOfKeyNames: string
+): string {
+  const result: string = wrapKeyNamesSeparately
+    ? stringOfKeyNames
+    : `<kbd>${stringOfKeyNames}</kbd>`;
+  return result;
 }

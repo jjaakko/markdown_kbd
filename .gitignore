@@ -1,6 +1,8 @@
 out
 node_modules
 dist
+getRegexForWrappingTests.js
+buildKeyListForReadmeFile.js
 .vscode-test/
 .vscode/settings.json
 *.vsix
