@@ -2,13 +2,13 @@
 
 Make key name combinations (such as <kbd>Cmd+r</kbd> for example)  more visible in your markdown document by wrapping key names with \<kbd\> tags.
 
+![Demo](images/markdown-kbd-demo.gif)
+
 ## Features
 
 * Auto-detects key name combination patterns from your document and wraps them with \<kbd\> tags.
 * Wraps either each key name separately or the whole key name combination, based on configuration.
 * Replaces ctrl, cmd, opt and shift with icons (^, ⌘, ⌥, ⇧).
-
-![Demo](images/markdown-kbd-demo.gif)
 
 ## How to use this extension
 
@@ -17,6 +17,12 @@ Make key name combinations (such as <kbd>Cmd+r</kbd> for example)  more visible 
 * If you created a new file, remember to save it with <code>.md</code> extension.
 * Open ctrl panel by hitting <kbd>cmd+shift+p</kbd>.
 * Type markdown kbd and select <code>Wrap With Kbd Tags In Active Editor</code>.
+* Note: only keyword combinations are wrapped in <kbd> tags. Single key names such as <code>Cmd></code> are not wrapped.
+
+## Caveats
+
+* Not all flavours of markdown support <kbd> elements.
+* Settings affect how key names are wrapped from that point onwards.
 
 ## Extension Settings
 

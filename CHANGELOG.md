@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+- Strict mode & loose mode (wrap single key names as well)
+- Make replacing key names with icons a separate command?
+- Strip off from selected area
+- Set default key bindings
+
 ## [0.2] - 2020-01-05
 - Added prevention of nested tag structures.
 - Addded option to replace key names with icons and set it to default.
