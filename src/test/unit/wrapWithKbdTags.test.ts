@@ -39,9 +39,13 @@ suite("wrapKeyNamesWithKbdTags()", () => {
     const input: string = "ctrl+i";
     const output: string = wrapKeyNamesWithKbdTags(
       input,
-      config,
-      getRegexForMatchingKeyNameCombinations
+      config
     );
+    // const output: string = wrapKeyNamesWithKbdTags(
+    //   input,
+    //   config,
+    //   getRegexForMatchingKeyNameCombinations
+    // );
     const expected: string = "<kbd>Ctrl</kbd>+<kbd>I</kbd>";
     expect(output).to.equal(expected);
   });
