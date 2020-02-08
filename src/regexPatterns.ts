@@ -2,7 +2,7 @@ export function getRegexForMatchingKeyNamesNotYetWrapped(validKeys: string[]) {
   // Start of a line or non word character.
   const matchStart = `(?:^|\\W)`;
   const pattern: RegExp = new RegExp(
-    `(?<!<kbd)` + // Prevent <kbd>cmd+i from matching. Note: '>' is consumed as a padding.
+    `A(?<!<kbd)` + // Prevent <kbd>cmd+i from matching. Note: '>' is consumed as a padding.
     matchStart +
     getRegexMatchingKeyNames(validKeys) +
     "(?:$|\\W)" + // End of line or non word character
@@ -30,6 +30,7 @@ export function getRegexForMatchingKeyNamesWrappedAlready(validKeys: string[]) {
  * @param validKeys Valid key names.
  * @returns Regular expression.
  */
+// IT APPEARS THIS FUNCTION IS NOT USED!!
 export function createRegExp(validKeys: string[]): RegExp {
   // Helper strings for defining regular expression.
 
