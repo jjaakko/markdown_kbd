@@ -4,7 +4,7 @@ import { Config } from "../types";
 import {
   createRegExp,
   getRegexForMatchingKeyNamesNotYetWrapped,
-  getRegexForMatchingKeyNamesWrappedAlready
+  getRegexForMatchingKeyNamesWrappedAlready,
 } from "../regexPatterns";
 import { ConfigurationTarget } from "vscode";
 
@@ -16,15 +16,14 @@ import { ConfigurationTarget } from "vscode";
  */
 export function wrapKeyNamesWithKbdTags(
   stringWithKeyboardStrings: string,
-  config: Config,
-  getRegexForMatchingKeyNameCombinations: Function = getRegexForMatchingKeyNamesNotYetWrapped
+  config: Config
 ): string {
   // Provide default config, which can be overridden with the actual config parameter
   const effectiveConfig: Config = Object.assign(
     {
       wrapKeyNamesSeparately: false,
       addSpacesAroundPlusSign: false,
-      replaceWithIcons: true
+      replaceWithIcons: true,
     },
     config
   );
@@ -32,7 +31,7 @@ export function wrapKeyNamesWithKbdTags(
   const result = wrapKeyNamesWithKbdTags_(
     stringWithKeyboardStrings,
     effectiveConfig,
-    getRegexForMatchingKeyNameCombinations
+    getRegexForMatchingKeyNamesNotYetWrapped
   );
   return result;
 }
@@ -97,7 +96,9 @@ export function wrapKeyNamesWithKbdTags_(
               .replace("shift", "⇧");
           }
           const trimmedElement: string = replacementsDone.trim();
-          const keyNameWithCorrectCase: string = startCase(trimmedElement.toLowerCase());
+          const keyNameWithCorrectCase: string = startCase(
+            trimmedElement.toLowerCase()
+          );
           return wrapKeyNamesSeparately
             ? `<kbd>${keyNameWithCorrectCase}</kbd>`
             : keyNameWithCorrectCase;
