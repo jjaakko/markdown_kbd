@@ -4,6 +4,7 @@ import "mocha";
 
 import { wrapKeyNamesWithKbdTags } from "../../regex_manipulation/regex_manipulation.js";
 import { Config } from "../../types";
+import * as obj from "../../regexPatterns.js";
 
 // Copied from https://github.com/NilsJPWerner/autoDocstring/blob/master/src/test/parse/docstring_is_closed.spec.ts
 chai.config.truncateThreshold = 0;
@@ -25,22 +26,30 @@ suite("wrapKeyNamesWithKbdTags()", () => {
   // };
 
   const getRegexForMatchingKeyNameCombinations = sinon.stub();
-  getRegexForMatchingKeyNameCombinations.returns(new RegExp(
-    /(?<!<kbd)(?:^|\W)(cmd|⌘|shift|ctrl|alt|enter|esc|tab|space|opt|⌥|F1|F2|F3|F4|F5|F6|F7|F8|F9|F10|F11|F12) ?\+ ?([a-z]|((cmd|⌘|shift|ctrl|alt|enter|esc|tab|space|opt|⌥|F1|F2|F3|F4|F5|F6|F7|F8|F9|F10|F11|F12)))( ?\+ ?([a-z]|((cmd|⌘|shift|ctrl|alt|enter|esc|tab|space|opt|⌥|F1|F2|F3|F4|F5|F6|F7|F8|F9|F10|F11|F12)))){0,5}(?:$|\W)(?!\/kbd>)/giu
-  ));
+  getRegexForMatchingKeyNameCombinations.returns(
+    new RegExp(
+      /(?<!<kbd)(?:^|\W)(cmd|⌘|shift|ctrl|alt|enter|esc|tab|space|opt|⌥|F1|F2|F3|F4|F5|F6|F7|F8|F9|F10|F11|F12) ?\+ ?([a-z]|((cmd|⌘|shift|ctrl|alt|enter|esc|tab|space|opt|⌥|F1|F2|F3|F4|F5|F6|F7|F8|F9|F10|F11|F12)))( ?\+ ?([a-z]|((cmd|⌘|shift|ctrl|alt|enter|esc|tab|space|opt|⌥|F1|F2|F3|F4|F5|F6|F7|F8|F9|F10|F11|F12)))){0,5}(?:$|\W)(?!\/kbd>)/giu
+    )
+  );
+
+  let stub = sinon.stub(obj, "getRegexForMatchingKeyNamesNotYetWrapped");
+  stub.returns(
+    new RegExp(
+      /(?<!<kbd)(?:^|\W)(cmd|⌘|shift|ctrl|alt|enter|esc|tab|space|opt|⌥|F1|F2|F3|F4|F5|F6|F7|F8|F9|F10|F11|F12) ?\+ ?([a-z]|((cmd|⌘|shift|ctrl|alt|enter|esc|tab|space|opt|⌥|F1|F2|F3|F4|F5|F6|F7|F8|F9|F10|F11|F12)))( ?\+ ?([a-z]|((cmd|⌘|shift|ctrl|alt|enter|esc|tab|space|opt|⌥|F1|F2|F3|F4|F5|F6|F7|F8|F9|F10|F11|F12)))){0,5}(?:$|\W)(?!\/kbd>)/giu
+    )
+  );
+
+  console.log(stub);
 
   let config: Config = {
     wrapKeyNamesSeparately: true,
     addSpacesAroundPlusSign: false,
-    replaceWithIcons: false
+    replaceWithIcons: false,
   };
 
   test("should return key names wrapped with <kbd> tags", () => {
     const input: string = "ctrl+i";
-    const output: string = wrapKeyNamesWithKbdTags(
-      input,
-      config
-    );
+    const output: string = wrapKeyNamesWithKbdTags(input, config);
     // const output: string = wrapKeyNamesWithKbdTags(
     //   input,
     //   config,
@@ -66,7 +75,7 @@ suite("wrapKeyNamesWithKbdTags()", () => {
     config = {
       wrapKeyNamesSeparately: false,
       addSpacesAroundPlusSign: true,
-      replaceWithIcons: false
+      replaceWithIcons: false,
     };
     const output: string = wrapKeyNamesWithKbdTags(
       input,
@@ -84,7 +93,11 @@ suite("wrapKeyNamesWithKbdTags()", () => {
       addSpacesAroundPlusSign: false,
       replaceWithIcons: false,
     };
-    const output: string = wrapKeyNamesWithKbdTags(input, config, getRegexForMatchingKeyNameCombinations);
+    const output: string = wrapKeyNamesWithKbdTags(
+      input,
+      config,
+      getRegexForMatchingKeyNameCombinations
+    );
     const expected: string = "<kbd>Ctrl+I</kbd>";
     expect(output).to.equal(expected);
   });
@@ -256,4 +269,6 @@ suite("wrapKeyNamesWithKbdTags()", () => {
     const expected: string = "<kbd>Alt</kbd>+<kbd>I</kbd>";
     expect(output.toString()).to.equal(expected);
   });
+
+  stub.restore();
 });
