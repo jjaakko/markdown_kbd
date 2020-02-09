@@ -32,20 +32,25 @@ suite("wrapKeyNamesWithKbdTags()", () => {
     )
   );
 
-  let stub = sinon.stub(obj, "getRegexForMatchingKeyNamesNotYetWrapped");
-  stub.returns(
-    new RegExp(
-      /(?<!<kbd)(?:^|\W)(cmd|⌘|shift|ctrl|alt|enter|esc|tab|space|opt|⌥|F1|F2|F3|F4|F5|F6|F7|F8|F9|F10|F11|F12) ?\+ ?([a-z]|((cmd|⌘|shift|ctrl|alt|enter|esc|tab|space|opt|⌥|F1|F2|F3|F4|F5|F6|F7|F8|F9|F10|F11|F12)))( ?\+ ?([a-z]|((cmd|⌘|shift|ctrl|alt|enter|esc|tab|space|opt|⌥|F1|F2|F3|F4|F5|F6|F7|F8|F9|F10|F11|F12)))){0,5}(?:$|\W)(?!\/kbd>)/giu
-    )
-  );
-
-  console.log(stub);
-
   let config: Config = {
     wrapKeyNamesSeparately: true,
     addSpacesAroundPlusSign: false,
     replaceWithIcons: false,
   };
+
+  let stub = sinon.stub(obj, "getRegexForMatchingKeyNamesNotYetWrapped");
+  suiteSetup(function() {
+    stub.returns(
+      new RegExp(
+        /(?<!<kbd)(?:^|\W)(cmd|⌘|shift|ctrl|alt|enter|esc|tab|space|opt|⌥|F1|F2|F3|F4|F5|F6|F7|F8|F9|F10|F11|F12) ?\+ ?([a-z]|((cmd|⌘|shift|ctrl|alt|enter|esc|tab|space|opt|⌥|F1|F2|F3|F4|F5|F6|F7|F8|F9|F10|F11|F12)))( ?\+ ?([a-z]|((cmd|⌘|shift|ctrl|alt|enter|esc|tab|space|opt|⌥|F1|F2|F3|F4|F5|F6|F7|F8|F9|F10|F11|F12)))){0,5}(?:$|\W)(?!\/kbd>)/giu
+      )
+    );
+    console.log(stub);
+  });
+
+  suiteTeardown(function() {
+    stub.restore();
+  });
 
   test("should return key names wrapped with <kbd> tags", () => {
     const input: string = "ctrl+i";
@@ -269,6 +274,4 @@ suite("wrapKeyNamesWithKbdTags()", () => {
     const expected: string = "<kbd>Alt</kbd>+<kbd>I</kbd>";
     expect(output.toString()).to.equal(expected);
   });
-
-  stub.restore();
 });
