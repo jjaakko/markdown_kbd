@@ -10,13 +10,6 @@ import * as regexPatternsModule from "../../regexPatterns.js";
 chai.config.truncateThreshold = 0;
 const expect = chai.expect;
 
-// Note: the default config is:
-// const config: Config = {
-//   wrapKeyNamesSeparately: true,
-//   addSpacesAroundPlusSign: false
-// };
-// If wrapKeyNamesWithKbdTags is passed `config`, the default config is used.
-
 suite("wrapKeyNamesWithKbdTags()", () => {
   // Is this in the right place? Could this be defined in suiteSetup..?
   let defaultConfig: Config = {
