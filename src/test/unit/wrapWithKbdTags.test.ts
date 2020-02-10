@@ -18,11 +18,14 @@ suite("wrapKeyNamesWithKbdTags()", () => {
     replaceWithIcons: false,
   };
 
-  let stub = sinon.stub(
-    regexPatternsModule,
-    "getRegexForMatchingKeyNamesNotYetWrapped"
-  );
+  let stub = sinon.stub();
+
   suiteSetup(function() {
+    stub = sinon.stub(
+      regexPatternsModule,
+      "getRegexForMatchingKeyNamesNotYetWrapped"
+    );
+
     stub.returns(
       new RegExp(
         /(?<!<kbd)(?:^|\W)(ctrl|alt|opt|cmd|shift|⌥|⌘) ?\+ ?([a-z]|((ctrl|alt|opt|cmd|shift|⌥|⌘)))( ?\+ ?([a-z]|((ctrl|alt|opt|cmd|shift|⌥|⌘)))){0,5}(?:$|\W)(?!\/kbd>)/giu
@@ -40,6 +43,7 @@ suite("wrapKeyNamesWithKbdTags()", () => {
     const output: string = wrapKeyNamesWithKbdTags(input, config);
     const expected: string = "<kbd>Ctrl</kbd>+<kbd>I</kbd>";
     expect(output).to.equal(expected);
+    
   });
 
   test("should return key names wrapped in <kbd> tags and spaces between keynames removed", () => {
@@ -48,6 +52,7 @@ suite("wrapKeyNamesWithKbdTags()", () => {
     const output: string = wrapKeyNamesWithKbdTags(input, config);
     const expected: string = "<kbd>Ctrl</kbd>+<kbd>I</kbd>";
     expect(output).to.equal(expected);
+    
   });
 
   test("should return key names wrapped in <kbd> tags and spaces added between key names", () => {
@@ -60,6 +65,7 @@ suite("wrapKeyNamesWithKbdTags()", () => {
     const output: string = wrapKeyNamesWithKbdTags(input, config);
     const expected: string = "<kbd>Ctrl + I</kbd>";
     expect(output).to.equal(expected);
+    
   });
 
   test("should return all key names together, wrapped in one pair of <kbd> tags", () => {
@@ -72,6 +78,7 @@ suite("wrapKeyNamesWithKbdTags()", () => {
     const output: string = wrapKeyNamesWithKbdTags(input, config);
     const expected: string = "<kbd>Ctrl+I</kbd>";
     expect(output).to.equal(expected);
+    
   });
 
   test("should not wrap non key names ab + cd", () => {
@@ -80,6 +87,7 @@ suite("wrapKeyNamesWithKbdTags()", () => {
     const output: string = wrapKeyNamesWithKbdTags(input, config);
     const expected: string = "ab+cd";
     expect(output).to.equal(expected);
+    
   });
 
   test("should not create nested <kbd> structures", () => {
@@ -88,6 +96,7 @@ suite("wrapKeyNamesWithKbdTags()", () => {
     const output: string = wrapKeyNamesWithKbdTags(input, config);
     const expected: string = "<kbd>ctrl+i</kbd>";
     expect(output).to.equal(expected);
+    
   });
 
   test("Should wrap non-ascii characters such as ⌘", () => {
@@ -96,6 +105,7 @@ suite("wrapKeyNamesWithKbdTags()", () => {
     const output: string = wrapKeyNamesWithKbdTags(input, config);
     const expected: string = "<kbd>⌘</kbd>+<kbd>I</kbd>";
     expect(output).to.equal(expected);
+    
   });
 
   test("Should wrap key name combination in the middle of non ascii characters", () => {
@@ -104,6 +114,7 @@ suite("wrapKeyNamesWithKbdTags()", () => {
     const output: string = wrapKeyNamesWithKbdTags(input, config);
     const expected: string = "日本語 <kbd>⌘</kbd>+<kbd>I</kbd> 日本語";
     expect(output.toString()).to.equal(expected);
+    
   });
 
   test("Should replace cmd with ⌘", () => {
@@ -112,6 +123,7 @@ suite("wrapKeyNamesWithKbdTags()", () => {
     const output: string = wrapKeyNamesWithKbdTags(input, config);
     const expected: string = "<kbd>⌘</kbd>+<kbd>I</kbd>";
     expect(output.toString()).to.equal(expected);
+    
   });
 
   test("Should replace opt with ⌥", () => {
@@ -120,6 +132,7 @@ suite("wrapKeyNamesWithKbdTags()", () => {
     const output: string = wrapKeyNamesWithKbdTags(input, config);
     const expected: string = "<kbd>⌥</kbd>+<kbd>I</kbd>";
     expect(output.toString()).to.equal(expected);
+    
   });
 
   test("Should not replace alt with ⌥", () => {
@@ -128,5 +141,6 @@ suite("wrapKeyNamesWithKbdTags()", () => {
     const output: string = wrapKeyNamesWithKbdTags(input, config);
     const expected: string = "<kbd>Alt</kbd>+<kbd>I</kbd>";
     expect(output.toString()).to.equal(expected);
+    
   });
 });

@@ -2,7 +2,7 @@ export function getRegexForMatchingKeyNamesNotYetWrapped(validKeys: string[]) {
   // Start of a line or non word character.
   const matchStart = `(?:^|\\W)`;
   const pattern: RegExp = new RegExp(
-    `A(?<!<kbd)` + // Prevent <kbd>cmd+i from matching. Note: '>' is consumed as a padding.
+    `(?<!<kbd)` + // Prevent <kbd>cmd+i from matching. Note: '>' is consumed as a padding.
     matchStart +
     getRegexMatchingKeyNames(validKeys) +
     "(?:$|\\W)" + // End of line or non word character

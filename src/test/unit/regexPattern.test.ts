@@ -4,9 +4,8 @@ import "mocha";
 import {
   createRegExp,
   getRegexForMatchingKeyNamesNotYetWrapped,
-  getRegexForMatchingKeyNamesWrappedAlready
+  getRegexForMatchingKeyNamesWrappedAlready,
 } from "../../regexPatterns.js";
-import { AssertionError } from "assert";
 
 // Copied from https://github.com/NilsJPWerner/autoDocstring/blob/master/src/test/parse/docstring_is_closed.spec.ts
 chai.config.truncateThreshold = 0;
@@ -152,7 +151,7 @@ suite("getRegexForMatchingKeyNamesWrappedAlready", () => {
       expect.fail("No match");
     }
   });
-  
+
   test("Regex pattern should match multiple key names already wrapped with <kbd> tags.", () => {
     const testString = "<kbd>ctrl+i</kbd>, <kbd>ctrl+shift+k</kbd>";
     const expected = ["<kbd>ctrl+i</kbd>", "ctrl+i"];
@@ -177,5 +176,4 @@ suite("getRegexForMatchingKeyNamesWrappedAlready", () => {
       expect.fail("No match");
     }
   });
-
 });
