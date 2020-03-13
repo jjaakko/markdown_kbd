@@ -152,6 +152,12 @@ suite("getRegexForMatchingKeyNamesWrappedAlready", () => {
     }
   });
 
+  // NOTE: These tests are not relevant currently.
+  // <kbd> tags are currently removed with out complex regex.
+  // Preserve the tests for future reference.
+  // getRegexForMatchingKeyNamesWrappedAlready doesn't currently
+  // match <kbd>⌘</kbd>+<kbd>c</kbd> as it doesn't consider
+  // single character without a plus sign as part ot a sequence to be matched.
   test("Regex pattern should match multiple key names already wrapped with <kbd> tags.", () => {
     const testString = "<kbd>ctrl+i</kbd>, <kbd>ctrl+shift+k</kbd>";
     const expected = ["<kbd>ctrl+i</kbd>", "ctrl+i"];
@@ -175,5 +181,18 @@ suite("getRegexForMatchingKeyNamesWrappedAlready", () => {
     } else {
       expect.fail("No match");
     }
+  });
+
+  test("Regex pattern should match ⌘+C already wrapped with <kbd> tags.", () => {
+    const testString: string = "<kbd>⌘</kbd>+<kbd>c</kbd>";
+    const validKeyNames = ["⌘"];
+    const pattern: RegExp = getRegexForMatchingKeyNamesWrappedAlready(
+      validKeyNames
+    );
+    const result = pattern.exec(testString);
+    // We expect no match as <kbd>⌘</kbd>+<kbd>c</kbd> is not considered as valid pattern by
+    // getRegexForMatchingKeyNamesWrappedAlready.
+    // NOTE: <kbd>⌘+c</kbd> would be a valid pattern.
+    expect(result).to.eql(null);
   });
 });

@@ -4,7 +4,7 @@ import { Config } from "../types";
 import {
   createRegExp,
   getRegexForMatchingKeyNamesNotYetWrapped,
-  getRegexForMatchingKeyNamesWrappedAlready,
+  getRegexForMatchingKeyNamesWrappedAlready
 } from "../regexPatterns";
 import { ConfigurationTarget } from "vscode";
 
@@ -23,7 +23,7 @@ export function wrapKeyNamesWithKbdTags(
     {
       wrapKeyNamesSeparately: false,
       addSpacesAroundPlusSign: false,
-      replaceWithIcons: true,
+      replaceWithIcons: true
     },
     config
   );
@@ -133,6 +133,18 @@ export function stripKbdTagsFromString(stringWithKbdTags: string) {
       // For each occurence of <kbd>[some text inside]</kbd>
       // return just the text inside.
       return p1;
+    }
+  );
+
+  return textWithKbdTagsRemoved;
+}
+
+export function stripAllKbdTagsFromString(stringWithKbdTags: string) {
+  const pattern: RegExp = new RegExp("<kbd>|</kbd>", "giu");
+  const textWithKbdTagsRemoved = stringWithKbdTags.replace(
+    pattern,
+    (_match, _p1) => {
+      return "";
     }
   );
 

@@ -28,7 +28,8 @@
   "activationEvents": [
     "onCommand:markdownKbd.wrapWithKbdTagsInSelectedArea",
     "onCommand:markdownKbd.wrapWithKbdTagsInActiveEditor",
-    "onCommand:markdownKbd.stripKbdTagsFromActiveEditor"
+    "onCommand:markdownKbd.stripKbdTagsFromActiveEditor",
+    "onCommand:markdownKbd.stripKbdTagsFromSelectedArea"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -67,6 +68,11 @@
         "command": "markdownKbd.stripKbdTagsFromActiveEditor",
         "title": "Strip off <kbd> tags from active editor.",
         "category": "Markdown Kbd"
+      },
+      {
+        "command": "markdownKbd.stripKbdTagsFromSelectedArea",
+        "title": "Strip off <kbd> tags from selected area.",
+        "category": "Markdown Kbd"
       }
     ],
     "menus": {
@@ -86,6 +92,12 @@
         {
           "command": "markdownKbd.stripKbdTagsFromActiveEditor",
           "title": "%markdownKbd.stripKbdTagsFromActiveEditor.title%",
+          "category": "Markdown Kbd",
+          "when": "editorLangId == markdown"
+        },
+        {
+          "command": "markdownKbd.stripKbdTagsFromSelectedArea",
+          "title": "%markdownKbd.stripKbdTagsFromSelectedArea.title%",
           "category": "Markdown Kbd",
           "when": "editorLangId == markdown"
         }

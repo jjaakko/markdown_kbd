@@ -5,7 +5,7 @@ import {
   wrapKeyNamesInSelectionWithKbdTags,
   wrapKeyNamesInActiveEditorWithKbdTags
 } from "./wrapKeyNamesWithKbdTags";
-import { stripKbdTagsFromActiveDocument } from "./stripKbdTags";
+import { stripKbdTagsFromActiveDocument, stripKbdTagsFromSelectedArea } from "./stripKbdTags";
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -22,6 +22,10 @@ export function activate(context: vscode.ExtensionContext) {
     {
       commandName: "markdownKbd.stripKbdTagsFromActiveEditor",
       callbackFunction: stripKbdTagsFromActiveDocument
+    },
+    {
+      commandName: "markdownKbd.stripKbdTagsFromSelectedArea",
+      callbackFunction: stripKbdTagsFromSelectedArea
     }
   ];
   for (let {commandName, callbackFunction} of commands) {

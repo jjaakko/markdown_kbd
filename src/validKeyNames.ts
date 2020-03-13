@@ -25,5 +25,6 @@ export const validKeyNames = [
   "F11",
   "F12",
   "pageup",
-  "pagedown"
+  "pagedown",
+  "backspace"
 ];

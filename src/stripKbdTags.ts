@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 
-import { stripKbdTagsFromString } from "./regex_manipulation/regex_manipulation";
+import { stripAllKbdTagsFromString } from "./regex_manipulation/regex_manipulation";
+import { Config } from "./types";
 
 /**
  * Strips kbd tags from active document.
@@ -20,11 +21,31 @@ export function stripKbdTagsFromActiveDocument() {
       document.positionAt(fullText.length)
     );
 
-    const stringKbdTagsStrippedOff = stripKbdTagsFromString(fullText);
+    const stringKbdTagsStrippedOff = stripAllKbdTagsFromString(fullText);
 
     // Replace the text
     editor.edit((editBuilder: any) => {
       editBuilder.replace(fullRange, stringKbdTagsStrippedOff);
+    });
+  }
+}
+
+export function stripKbdTagsFromSelectedArea() {
+  // Get the active text editor.
+  let editor: vscode.TextEditor = vscode.window.activeTextEditor!;
+
+  if (editor && editor.document.languageId === "markdown") {
+    let document = editor.document;
+    let selection = editor.selection;
+    const textInSelection = document.getText(selection);
+
+    let conf: unknown = vscode.workspace.getConfiguration("markdownKbd");
+    const config = conf as Config;
+
+    const textWithKbdTags: string = stripAllKbdTagsFromString(textInSelection);
+
+    editor.edit(editBuilder => {
+      editBuilder.replace(selection, textWithKbdTags);
     });
   }
 }
