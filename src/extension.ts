@@ -6,6 +6,7 @@ import {
   wrapKeyNamesInActiveEditorWithKbdTags
 } from "./wrapKeyNamesWithKbdTags";
 import { stripKbdTagsFromActiveDocument, stripKbdTagsFromSelectedArea } from "./stripKbdTags";
+import {replaceKeyNamesWithUnicodeChars} from "./replaceKeyNamesWithUnicodeChars";
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -26,6 +27,10 @@ export function activate(context: vscode.ExtensionContext) {
     {
       commandName: "markdownKbd.stripKbdTagsFromSelectedArea",
       callbackFunction: stripKbdTagsFromSelectedArea
+    },
+    {
+      commandName: "markdownKbd.replaceKeyNamesWithUnicodeChars",
+      callbackFunction: replaceKeyNamesWithUnicodeChars
     }
   ];
   for (let {commandName, callbackFunction} of commands) {

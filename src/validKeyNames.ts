@@ -28,3 +28,20 @@ export const validKeyNames = [
   "pagedown",
   "backspace"
 ];
+
+// See https://wincent.com/wiki/Unicode_representations_of_modifier_keys
+export const keyNamesToIcons = [
+  { keyName: "cmd", icon: "⌘" }, // "\\u{2318}"
+  { keyName: "shift", icon: "⇧" },
+  { keyName: "ctrl", icon: "^" },
+  { keyName: "alt", icon: "⌥" }, // "\\u{2325}"
+  { keyName: "opt", icon: "⌥" },
+  { keyName: "enter", icon: "⏎" },
+  { keyName: "pageup", icon: "⇞" },
+  { keyName: "pagedown", icon: "⇟" },
+  { keyName: "backspace", icon: "⌫" },
+  { keyName: "arl", icon: "→" },
+  { keyName: "arr", icon: "→" },
+  { keyName: "aup", icon: "↑" },
+  { keyName: "ado", icon: "↓" }
+];
