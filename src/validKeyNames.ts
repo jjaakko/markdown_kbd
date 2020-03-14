@@ -19,7 +19,7 @@ export const keyNamesWithoutIcons = [
 
 // See https://wincent.com/wiki/Unicode_representations_of_modifier_keys
 export const keyNamesToIcons = [
-  { keyName: "cmd", icon: "⌘" }, // "\\u{2318}"
+  { keyName: "cmd", icon: "⌘" },
   { keyName: "shift", icon: "⇧" },
   { keyName: "ctrl", icon: "^" },
   { keyName: "opt", icon: "⌥" },
