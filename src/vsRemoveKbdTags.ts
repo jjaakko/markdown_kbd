@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 
-import { stripAllKbdTagsFromString } from "./regexManipulation";
+import { stripAllKbdTagsFromString } from "./removeKbdTags";
 import { Config } from "./types";
 
 /**

@@ -4,11 +4,11 @@ import * as vscode from "vscode";
 import {
   wrapKeyNamesInSelectionWithKbdTags,
   wrapKeyNamesInActiveEditorWithKbdTags
-} from "./wrapKeyNamesWithKbdTags";
+} from "./vsWrap";
 import {
   stripKbdTagsFromActiveDocument,
   stripKbdTagsFromSelectedArea
-} from "./stripKbdTags";
+} from "./vsRemoveKbdTags";
 import { vsReplace } from "./vsReplace";
 
 // this method is called when your extension is activated

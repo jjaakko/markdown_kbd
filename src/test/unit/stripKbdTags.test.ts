@@ -2,9 +2,8 @@ import chai = require("chai");
 import "mocha";
 
 import {
-  stripKbdTagsFromString,
   stripAllKbdTagsFromString
-} from "../../regexManipulation.js";
+} from "../../removeKbdTags";
 
 // Copied from https://github.com/NilsJPWerner/autoDocstring/blob/master/src/test/parse/docstring_is_closed.spec.ts
 chai.config.truncateThreshold = 0;
