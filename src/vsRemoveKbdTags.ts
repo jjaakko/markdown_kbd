@@ -12,9 +12,6 @@ export function stripKbdTagsFromSelectedArea() {
     let selection = editor.selection;
     const textInSelection = document.getText(selection);
 
-    let conf: unknown = vscode.workspace.getConfiguration("markdownKbd");
-    const config = conf as Config;
-
     const textWithKbdTags: string = stripAllKbdTagsFromString(textInSelection);
 
     editor.edit(editBuilder => {
