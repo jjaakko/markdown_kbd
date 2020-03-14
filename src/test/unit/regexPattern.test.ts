@@ -11,7 +11,7 @@ import {
 chai.config.truncateThreshold = 0;
 const expect = chai.expect;
 
-suite("getRegexForMatchingKeyNamesNotYetWrapped", () => {
+suite("Test matching key names that are not yet wrapped with kbd tags.", () => {
   test("Regex pattern should match single simple key name combination", () => {
     const testString = "ctrl+i";
     const expected = ["ctrl+i"];
@@ -135,7 +135,7 @@ suite("getRegexForMatchingKeyNamesNotYetWrapped", () => {
   });
 });
 
-suite("getRegexForMatchingKeyNamesWrappedAlready", () => {
+suite("Test matching key names that are already wrapped with kbd tags.", () => {
   test("Regex pattern should match key names already wrapped with <kbd> tags.", () => {
     const testString: string = "<kbd>ctrl+i</kbd>";
     const expected = ["<kbd>ctrl+i</kbd>", "ctrl+i"];

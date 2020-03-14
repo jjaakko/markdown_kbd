@@ -9,22 +9,22 @@ import {
 chai.config.truncateThreshold = 0;
 const expect = chai.expect;
 
-suite("stripKbdTagsFromString", () => {
-  test("should remove kbd tags", () => {
+suite("Test removing kbd tags from string", () => {
+  test("Should remove kbd tags.", () => {
     const input: string = "<kbd>ctrl+i</kbd>";
     const output: string = stripAllKbdTagsFromString(input);
     const expected: string = "ctrl+i";
     expect(output).to.equal(expected);
   });
 
-  test("should remove multiple kbd tags", () => {
+  test("Should remove multiple kbd tags.", () => {
     const input: string = "<kbd>Ctrl+i</kbd>, <kbd>Ctrl+r</kbd>";
     const output: string = stripAllKbdTagsFromString(input);
     const expected: string = "Ctrl+i, Ctrl+r";
     expect(output).to.equal(expected);
   });
 
-  test("should remove multiple kbd tags containing unicode characters", () => {
+  test("Should remove multiple kbd tags containing unicode characters.", () => {
     const input: string = "<kbd>⌘</kbd>+<kbd>c</kbd>";
     const output: string = stripAllKbdTagsFromString(input);
     const expected: string = "⌘+c";

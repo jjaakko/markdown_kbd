@@ -10,7 +10,7 @@ import * as regexPatternsModule from "../../regexPatterns.js";
 chai.config.truncateThreshold = 0;
 const expect = chai.expect;
 
-suite("wrapKeyNamesWithKbdTags()", () => {
+suite("Test wrap key names functionality & wrap and replace functionality", () => {
   // Is this in the right place? Could this be defined in suiteSetup..?
   let defaultConfig: Config = {
     wrapKeyNamesSeparately: true,

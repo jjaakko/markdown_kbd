@@ -9,7 +9,7 @@ import { doReplacement } from "../../replace.js";
 chai.config.truncateThreshold = 0;
 const expect = chai.expect;
 
-suite("replaceKeyNamesWithIcons", () => {
+suite("Test replacing key names with icons or vice versa", () => {
   test("Replace key names in the beginning of sentence.", () => {
     const input: string = "cmd + i lorem ipsum";
     const output: string = doReplacement(input, true);
@@ -35,6 +35,13 @@ suite("replaceKeyNamesWithIcons", () => {
     const input: string = "in the middlecmdof a word.";
     const output: string = doReplacement(input, true);
     const expected: string = "in the middlecmdof a word.";
+    expect(output).to.eql(expected);
+  });
+
+  test("Replace multiple icons with key names.", () => {
+    const input: string = "Hit ⌘+⇧+p to open command palette.";
+    const output: string = doReplacement(input, false);
+    const expected: string = "Hit cmd+shift+p to open command palette.";
     expect(output).to.eql(expected);
   });
 });
