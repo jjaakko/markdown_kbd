@@ -2,11 +2,9 @@ import { startCase } from "lodash";
 import { validKeyNames } from "../validKeyNames";
 import { Config } from "../types";
 import {
-  createRegExp,
   getRegexForMatchingKeyNamesNotYetWrapped,
   getRegexForMatchingKeyNamesWrappedAlready
 } from "../regexPatterns";
-import { ConfigurationTarget } from "vscode";
 
 /**
  * Providing default configuration and wrap key names with kbd tags.

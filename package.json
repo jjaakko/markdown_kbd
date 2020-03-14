@@ -30,7 +30,7 @@
     "onCommand:markdownKbd.wrapWithKbdTagsInActiveEditor",
     "onCommand:markdownKbd.stripKbdTagsFromActiveEditor",
     "onCommand:markdownKbd.stripKbdTagsFromSelectedArea",
-    "onCommand:markdownKbd.replaceKeyNamesWithUnicodeChars"
+    "onCommand:markdownKbd.replaceKeyNamesWithIcons"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -47,10 +47,15 @@
           "default": false,
           "description": "Add one space between the keynames and the plus sign."
         },
-        "markdownKbd.replaceWithIcons": {
+        "markdownKbd.replaceKeyNamesWithIcons": {
           "type": "boolean",
           "default": true,
-          "description": "Replace ctrl, cmd, opt and shift with icons (^, ⌘, ⌥, ⇧)."
+          "description": "Replace key names with icons."
+        },
+        "markdownKbd.replaceIconsWithKeyNames": {
+          "type": "boolean",
+          "default": true,
+          "description": "Replace icons with key names."
         }
       }
     },
@@ -76,8 +81,13 @@
         "category": "Markdown Kbd"
       },
       {
-        "command": "markdownKbd.replaceKeyNamesWithUnicodeChars",
-        "title": "Replace keynames with unicode characters.",
+        "command": "markdownKbd.replaceKeyNamesWithIcons",
+        "title": "Replace keynames with icons in selected area.",
+        "category": "Markdown Kbd"
+      },
+      {
+        "command": "markdownKbd.replaceIconsWithKeyNames",
+        "title": "Replace icons with key names in selected area.",
         "category": "Markdown Kbd"
       }
     ],
@@ -108,8 +118,14 @@
           "when": "editorLangId == markdown"
         },
         {
-          "command": "markdownKbd.replaceKeyNamesWithUnicodeChars",
-          "title": "%markdownKbd.replaceKeyNamesWithUnicodeCharacters.title%",
+          "command": "markdownKbd.replaceKeyNamesWithIcons",
+          "title": "%markdownKbd.replaceKeyNamesWithIcons.title%",
+          "category": "Markdown Kbd",
+          "when": "editorLangId == markdown"
+        },
+        {
+          "command": "markdownKbd.replaceIconsWithKeyNames",
+          "title": "%markdownKbd.replaceIconsWithKeyNames.title%",
           "category": "Markdown Kbd",
           "when": "editorLangId == markdown"
         }
