@@ -29,7 +29,8 @@
     "onCommand:markdownKbd.wrapWithKbdTagsInSelectedArea",
     "onCommand:markdownKbd.wrapWithKbdTagsInActiveEditor",
     "onCommand:markdownKbd.stripKbdTagsFromActiveEditor",
-    "onCommand:markdownKbd.stripKbdTagsFromSelectedArea"
+    "onCommand:markdownKbd.stripKbdTagsFromSelectedArea",
+    "onCommand:markdownKbd.replaceKeyNamesWithUnicodeChars"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -73,6 +74,11 @@
         "command": "markdownKbd.stripKbdTagsFromSelectedArea",
         "title": "Strip off <kbd> tags from selected area.",
         "category": "Markdown Kbd"
+      },
+      {
+        "command": "markdownKbd.replaceKeyNamesWithUnicodeChars",
+        "title": "Replace keynames with unicode characters.",
+        "category": "Markdown Kbd"
       }
     ],
     "menus": {
@@ -98,6 +104,12 @@
         {
           "command": "markdownKbd.stripKbdTagsFromSelectedArea",
           "title": "%markdownKbd.stripKbdTagsFromSelectedArea.title%",
+          "category": "Markdown Kbd",
+          "when": "editorLangId == markdown"
+        },
+        {
+          "command": "markdownKbd.replaceKeyNamesWithUnicodeChars",
+          "title": "%markdownKbd.replaceKeyNamesWithUnicodeCharacters.title%",
           "category": "Markdown Kbd",
           "when": "editorLangId == markdown"
         }

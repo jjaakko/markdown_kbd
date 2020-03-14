@@ -11,16 +11,23 @@ const expect = chai.expect;
 
 suite("replaceKeyNamesWithIcons", () => {
   test("replace", () => {
-    const input: string = "ctrl + i";
+    const input: string = "ctrl + i moi";
     const output: string = doReplaceKeyNamesWithUnicodeChars(input);
-    const expected: string = "^ + i";
+    const expected: string = "hei ^ + i moi";
     expect(output).to.eql(expected);
   });
 
   test("Don't replace key name in the middle of a word.", () => {
-    const input: string = "in the middlectrlof a word.";
+    const input: string = "in the middlecmdof a word.";
     const output: string = doReplaceKeyNamesWithUnicodeChars(input);
-    const expected: string = "in the middlectrlof a word.";
+    const expected: string = "in the middlecmdof a word.";
+    expect(output).to.eql(expected);
+  });
+
+  test("After dot", () => {
+    const input: string = ".cmd ";
+    const output: string = doReplaceKeyNamesWithUnicodeChars(input);
+    const expected: string = ".⌘ ";
     expect(output).to.eql(expected);
   });
 });
