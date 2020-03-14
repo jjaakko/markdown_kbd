@@ -13,7 +13,7 @@ suite("replaceKeyNamesWithIcons", () => {
   test("replace", () => {
     const input: string = "ctrl + i moi";
     const output: string = doReplaceKeyNamesWithUnicodeChars(input);
-    const expected: string = "hei ^ + i moi";
+    const expected: string = "^ + i moi";
     expect(output).to.eql(expected);
   });
 
