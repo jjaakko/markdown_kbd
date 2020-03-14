@@ -1,8 +1,8 @@
 import * as vscode from "vscode";
-import { doReplaceKeyNamesWithUnicodeChars } from "./replaceWithIcons";
+import { doReplacement } from "./replaceWithIcons";
 import { Config } from "./types";
 
-export function replaceKeyNamesWithIcons(replaceWithIcons: boolean) {
+export function vsReplace(replaceWithIcons: boolean) {
   // Get the active text editor.
   let editor: vscode.TextEditor = vscode.window.activeTextEditor!;
 
@@ -14,13 +14,13 @@ export function replaceKeyNamesWithIcons(replaceWithIcons: boolean) {
     let conf: unknown = vscode.workspace.getConfiguration("markdownKbd");
     const config = conf as Config;
 
-    const textWithKbdTags: string = doReplaceKeyNamesWithUnicodeChars(
+    const newText: string = doReplacement(
       textInSelection,
       replaceWithIcons
     );
 
     editor.edit(editBuilder => {
-      editBuilder.replace(selection, textWithKbdTags);
+      editBuilder.replace(selection, newText);
     });
   }
 }

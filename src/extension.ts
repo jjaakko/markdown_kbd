@@ -9,7 +9,7 @@ import {
   stripKbdTagsFromActiveDocument,
   stripKbdTagsFromSelectedArea
 } from "./stripKbdTags";
-import { replaceKeyNamesWithIcons } from "./replaceKeyNamesWithIcons";
+import { vsReplace } from "./replaceKeyNamesWithIcons";
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -34,13 +34,13 @@ export function activate(context: vscode.ExtensionContext) {
     {
       commandName: "markdownKbd.replaceKeyNamesWithIcons",
       callbackFunction: () => {
-        return replaceKeyNamesWithIcons(true);
+        return vsReplace(true);
       }
     },
     {
       commandName: "markdownKbd.replaceIconsWithKeyNames",
       callbackFunction: () => {
-        return replaceKeyNamesWithIcons(false);
+        return vsReplace(false);
       }
     }
   ];

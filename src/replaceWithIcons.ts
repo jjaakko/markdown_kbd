@@ -1,21 +1,18 @@
 import { keyNamesToIcons } from "./validKeyNames";
 
-export function doReplaceKeyNamesWithUnicodeChars(
+export function doReplacement(
   text: string,
   replaceTextWithIcons: boolean
 ): string {
-  // See https://wincent.com/wiki/Unicode_representations_of_modifier_keys
+  if (!text) {
+    return "";
+  }
   const propertyNameIndicatingWhatIsBeingSearched: string = replaceTextWithIcons
     ? "keyName"
     : "icon";
   const propertyNameIndicatingReplaceValue: string = replaceTextWithIcons
     ? "icon"
     : "keyName";
-  // if (replaceTextWithIcons) {
-  //   const propertyNameToSearch: string = "keyName";
-  // } else {
-
-  // }
   const result = keyNamesToIcons.reduce(
     (accumulator, currentValue, index, arr) => {
       const regExString: string = `(^|[^a-z0-9])(${arr[index][propertyNameIndicatingWhatIsBeingSearched]})([^a-z0-9]|$)`;
@@ -31,6 +28,7 @@ export function doReplaceKeyNamesWithUnicodeChars(
           return replacement;
         }
       );
+      
       return accumulator;
     },
     text

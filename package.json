@@ -30,7 +30,8 @@
     "onCommand:markdownKbd.wrapWithKbdTagsInActiveEditor",
     "onCommand:markdownKbd.stripKbdTagsFromActiveEditor",
     "onCommand:markdownKbd.stripKbdTagsFromSelectedArea",
-    "onCommand:markdownKbd.replaceKeyNamesWithIcons"
+    "onCommand:markdownKbd.replaceKeyNamesWithIcons",
+    "onCommand:markdownKbd.replaceIconsWithKeyNames"
   ],
   "main": "./dist/extension.js",
   "contributes": {
