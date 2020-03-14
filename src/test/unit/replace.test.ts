@@ -41,7 +41,7 @@ suite("Test replacing key names with icons or vice versa", () => {
   test("Replace multiple icons with key names.", () => {
     const input: string = "Hit ⌘+⇧+p to open command palette.";
     const output: string = doReplacement(input, false);
-    const expected: string = "Hit cmd+shift+p to open command palette.";
+    const expected: string = "Hit Cmd+Shift+p to open command palette.";
     expect(output).to.eql(expected);
   });
 });

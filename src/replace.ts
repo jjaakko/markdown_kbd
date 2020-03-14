@@ -1,3 +1,4 @@
+import { startCase } from "lodash";
 import { keyNamesToIcons } from "./validKeyNames";
 
 export function doReplacement(
@@ -24,7 +25,13 @@ export function doReplacement(
           // In that case our match is " cmd ".
           // In our full match we need to relace "cmd" with "⌘" to not
           // lose the spaces around the cmd.
-          const replacement = match.replace(p2, arr[index][propertyNameIndicatingReplaceValue]);
+
+          // Handle casing. For example, icon ⌘ should be replaced with "Cmd" instead of "cmd".
+          // Yet when text is to be replaced with an icon, let's not try to change casing
+          // of an icon.
+          const keyNameOrIcon = arr[index][propertyNameIndicatingReplaceValue];
+          const keyNameOrIconWithCorrectCasing = replaceTextWithIcons ? keyNameOrIcon : startCase(keyNameOrIcon);
+          const replacement = match.replace(p2, keyNameOrIconWithCorrectCasing);
           return replacement;
         }
       );

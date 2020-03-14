@@ -38,7 +38,7 @@
       "properties": {
         "markdownKbd.wrapKeyNamesSeparately": {
           "type": "boolean",
-          "default": false,
+          "default": true,
           "description": "Wrap individual keynames separately. That is <kbd>Cmd</kbd> + <kbd>i</kbd instead of <kbd>Cmd + i</kbd>"
         },
         "markdownKbd.addSpacesAroundPlusSign": {
