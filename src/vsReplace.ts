@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { doReplacement } from "./replaceWithIcons";
+import { doReplacement } from "./replace";
 import { Config } from "./types";
 
 export function vsReplace(replaceWithIcons: boolean) {

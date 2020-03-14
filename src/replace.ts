@@ -14,7 +14,7 @@ export function doReplacement(
     ? "icon"
     : "keyName";
   const result = keyNamesToIcons.reduce(
-    (accumulator, currentValue, index, arr) => {
+    (accumulator, _currentValue, index, arr) => {
       const regExString: string = `(^|[^a-z0-9])(${arr[index][propertyNameIndicatingWhatIsBeingSearched]})([^a-z0-9]|$)`;
       const pattern: RegExp = new RegExp(regExString, "giu");
       accumulator = accumulator.replace(

@@ -9,7 +9,7 @@ import {
   stripKbdTagsFromActiveDocument,
   stripKbdTagsFromSelectedArea
 } from "./stripKbdTags";
-import { vsReplace } from "./replaceKeyNamesWithIcons";
+import { vsReplace } from "./vsReplace";
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed

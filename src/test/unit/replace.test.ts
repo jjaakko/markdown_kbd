@@ -3,7 +3,7 @@ import chai = require("chai");
 import "mocha";
 
 // import { wrapKeyNamesWithKbdTags } from "../../regex_manipulation/regex_manipulation.js";
-import { doReplacement } from "../../replaceWithIcons.js";
+import { doReplacement } from "../../replace.js";
 
 // Copied from https://github.com/NilsJPWerner/autoDocstring/blob/master/src/test/parse/docstring_is_closed.spec.ts
 chai.config.truncateThreshold = 0;
