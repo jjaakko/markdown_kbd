@@ -5,6 +5,7 @@ import {
   getRegexForMatchingKeyNamesNotYetWrapped,
   getRegexForMatchingKeyNamesWrappedAlready
 } from "./regexPatterns";
+import { doReplacement } from "./replace";
 
 /**
  * Providing default configuration and wrap key names with kbd tags.
@@ -80,19 +81,7 @@ export function wrapKeyNamesWithKbdTags_(
       // Wrap the elements with kbd tags
       let arrayOfKeyNames: string[] = stringsSplittedByChar.map(
         (element: string) => {
-          let replacementsDone: string = element;
-          if (replaceWithIcons) {
-            replacementsDone = element.toLowerCase().replace("cmd", "⌘");
-            replacementsDone = replacementsDone
-              .toLowerCase()
-              .replace("opt", "⌥");
-            replacementsDone = replacementsDone
-              .toLowerCase()
-              .replace("ctrl", "^");
-            replacementsDone = replacementsDone
-              .toLowerCase()
-              .replace("shift", "⇧");
-          }
+          let replacementsDone: string = doReplacement(element.toLowerCase(), true);
           const trimmedElement: string = replacementsDone.trim();
           const keyNameWithCorrectCase: string = startCase(
             trimmedElement.toLowerCase()
