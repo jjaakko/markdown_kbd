@@ -2,7 +2,7 @@ import chai = require("chai");
 import sinon = require("sinon");
 import "mocha";
 
-import { wrapKeyNamesWithKbdTags } from "../../regex_manipulation/regex_manipulation.js";
+import { wrapKeyNamesWithKbdTags } from "../../regexManipulation.js";
 import { Config } from "../../types";
 import * as regexPatternsModule from "../../regexPatterns.js";
 

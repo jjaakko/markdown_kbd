@@ -1,10 +1,10 @@
 import { startCase } from "lodash";
-import { validKeyNames } from "../validKeyNames";
-import { Config } from "../types";
+import { validKeyNames } from "./validKeyNames";
+import { Config } from "./types";
 import {
   getRegexForMatchingKeyNamesNotYetWrapped,
   getRegexForMatchingKeyNamesWrappedAlready
-} from "../regexPatterns";
+} from "./regexPatterns";
 
 /**
  * Providing default configuration and wrap key names with kbd tags.

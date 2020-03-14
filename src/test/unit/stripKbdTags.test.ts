@@ -4,7 +4,7 @@ import "mocha";
 import {
   stripKbdTagsFromString,
   stripAllKbdTagsFromString
-} from "../../regex_manipulation/regex_manipulation.js";
+} from "../../regexManipulation.js";
 
 // Copied from https://github.com/NilsJPWerner/autoDocstring/blob/master/src/test/parse/docstring_is_closed.spec.ts
 chai.config.truncateThreshold = 0;

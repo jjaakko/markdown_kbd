@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { wrapKeyNamesWithKbdTags } from "./regex_manipulation/regex_manipulation";
+import { wrapKeyNamesWithKbdTags } from "./regexManipulation";
 import { Config } from "./types";
 
 /**
