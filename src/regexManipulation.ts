@@ -47,7 +47,6 @@ export function wrapKeyNamesWithKbdTags_(
   getRegexForMatchingKeyNameCombinations
 ): string {
   const pattern: RegExp = getRegexForMatchingKeyNameCombinations(keyNamesWithoutIcons);
-  // console.log(pattern.toString());
   const textWithKbdTags: string = stringWithKeyboardStrings.replace(
     pattern,
     matchedString => {
@@ -81,7 +80,6 @@ export function wrapKeyNamesWithKbdTags_(
       // Wrap the elements with kbd tags
       let arrayOfKeyNames: string[] = stringsSplittedByChar.map(
         (element: string) => {
-          // console.log()
           let replacementsDone: string = element.toLowerCase();
           if (replaceWithIcons) {
             replacementsDone = doReplacement(element.toLowerCase(), true);
