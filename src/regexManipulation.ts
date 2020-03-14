@@ -1,5 +1,5 @@
 import { startCase } from "lodash";
-import { keyNamesWithoutIcons, validKeyNames } from "./validKeyNames";
+import { validKeyNames } from "./validKeyNames";
 import { Config } from "./types";
 import {
   getRegexForMatchingKeyNamesNotYetWrapped,
@@ -46,7 +46,7 @@ export function wrapKeyNamesWithKbdTags_(
   { wrapKeyNamesSeparately, addSpacesAroundPlusSign, replaceWithIcons }: Config,
   getRegexForMatchingKeyNameCombinations
 ): string {
-  const pattern: RegExp = getRegexForMatchingKeyNameCombinations(keyNamesWithoutIcons);
+  const pattern: RegExp = getRegexForMatchingKeyNameCombinations(validKeyNames);
   const textWithKbdTags: string = stringWithKeyboardStrings.replace(
     pattern,
     matchedString => {
