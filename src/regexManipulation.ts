@@ -1,5 +1,5 @@
 import { startCase } from "lodash";
-import { validKeyNames } from "./validKeyNames";
+import { keyNamesWithoutIcons, validKeyNames } from "./validKeyNames";
 import { Config } from "./types";
 import {
   getRegexForMatchingKeyNamesNotYetWrapped,
@@ -46,7 +46,7 @@ export function wrapKeyNamesWithKbdTags_(
   { wrapKeyNamesSeparately, addSpacesAroundPlusSign, replaceWithIcons }: Config,
   getRegexForMatchingKeyNameCombinations
 ): string {
-  const pattern: RegExp = getRegexForMatchingKeyNameCombinations(validKeyNames);
+  const pattern: RegExp = getRegexForMatchingKeyNameCombinations(keyNamesWithoutIcons);
   // console.log(pattern.toString());
   const textWithKbdTags: string = stringWithKeyboardStrings.replace(
     pattern,
@@ -81,7 +81,11 @@ export function wrapKeyNamesWithKbdTags_(
       // Wrap the elements with kbd tags
       let arrayOfKeyNames: string[] = stringsSplittedByChar.map(
         (element: string) => {
-          let replacementsDone: string = doReplacement(element.toLowerCase(), true);
+          // console.log()
+          let replacementsDone: string = element.toLowerCase();
+          if (replaceWithIcons) {
+            replacementsDone = doReplacement(element.toLowerCase(), true);
+          }
           const trimmedElement: string = replacementsDone.trim();
           const keyNameWithCorrectCase: string = startCase(
             trimmedElement.toLowerCase()

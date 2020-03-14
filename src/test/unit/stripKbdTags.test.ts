@@ -13,14 +13,14 @@ const expect = chai.expect;
 suite("stripKbdTagsFromString", () => {
   test("should remove kbd tags", () => {
     const input: string = "<kbd>ctrl+i</kbd>";
-    const output: string = stripKbdTagsFromString(input);
+    const output: string = stripAllKbdTagsFromString(input);
     const expected: string = "ctrl+i";
     expect(output).to.equal(expected);
   });
 
   test("should remove multiple kbd tags", () => {
     const input: string = "<kbd>Ctrl+i</kbd>, <kbd>Ctrl+r</kbd>";
-    const output: string = stripKbdTagsFromString(input);
+    const output: string = stripAllKbdTagsFromString(input);
     const expected: string = "Ctrl+i, Ctrl+r";
     expect(output).to.equal(expected);
   });
