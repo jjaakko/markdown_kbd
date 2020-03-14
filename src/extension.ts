@@ -3,10 +3,8 @@
 import * as vscode from "vscode";
 import {
   wrapKeyNamesInSelectionWithKbdTags,
-  wrapKeyNamesInActiveEditorWithKbdTags
 } from "./vsWrap";
 import {
-  stripKbdTagsFromActiveDocument,
   stripKbdTagsFromSelectedArea
 } from "./vsRemoveKbdTags";
 import { vsReplace } from "./vsReplace";
@@ -19,14 +17,14 @@ export function activate(context: vscode.ExtensionContext) {
       commandName: "markdownKbd.wrapWithKbdTagsInSelectedArea",
       callbackFunction: wrapKeyNamesInSelectionWithKbdTags
     },
-    {
-      commandName: "markdownKbd.wrapWithKbdTagsInActiveEditor",
-      callbackFunction: wrapKeyNamesInActiveEditorWithKbdTags
-    },
-    {
-      commandName: "markdownKbd.stripKbdTagsFromActiveEditor",
-      callbackFunction: stripKbdTagsFromActiveDocument
-    },
+    // {
+    //   commandName: "markdownKbd.wrapWithKbdTagsInActiveEditor",
+    //   callbackFunction: wrapKeyNamesInActiveEditorWithKbdTags
+    // },
+    // {
+    //   commandName: "markdownKbd.stripKbdTagsFromActiveEditor",
+    //   callbackFunction: stripKbdTagsFromActiveDocument
+    // },
     {
       commandName: "markdownKbd.stripKbdTagsFromSelectedArea",
       callbackFunction: stripKbdTagsFromSelectedArea

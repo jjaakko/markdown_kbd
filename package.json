@@ -27,8 +27,6 @@
   },
   "activationEvents": [
     "onCommand:markdownKbd.wrapWithKbdTagsInSelectedArea",
-    "onCommand:markdownKbd.wrapWithKbdTagsInActiveEditor",
-    "onCommand:markdownKbd.stripKbdTagsFromActiveEditor",
     "onCommand:markdownKbd.stripKbdTagsFromSelectedArea",
     "onCommand:markdownKbd.replaceKeyNamesWithIcons",
     "onCommand:markdownKbd.replaceIconsWithKeyNames"
@@ -52,11 +50,6 @@
           "type": "boolean",
           "default": true,
           "description": "Replace key names with icons."
-        },
-        "markdownKbd.replaceIconsWithKeyNames": {
-          "type": "boolean",
-          "default": true,
-          "description": "Replace icons with key names."
         }
       }
     },
@@ -64,16 +57,6 @@
       {
         "command": "markdownKbd.wrapWithKbdTagsInSelectedArea",
         "title": "Wrap key names in selected area with <kbd> tags.",
-        "category": "Markdown Kbd"
-      },
-      {
-        "command": "markdownKbd.wrapWithKbdTagsInActiveEditor",
-        "title": "Wrap key names in active editor with <kbd> tags.",
-        "category": "Markdown Kbd"
-      },
-      {
-        "command": "markdownKbd.stripKbdTagsFromActiveEditor",
-        "title": "Strip off <kbd> tags from active editor.",
         "category": "Markdown Kbd"
       },
       {
@@ -97,18 +80,6 @@
         {
           "command": "markdownKbd.wrapWithKbdTagsInSelectedArea",
           "title": "%markdownKbd.wrapWithKbdTagsInSelectedArea.title%",
-          "category": "Markdown Kbd",
-          "when": "editorLangId == markdown"
-        },
-        {
-          "command": "markdownKbd.wrapWithKbdTagsInActiveEditor",
-          "title": "%markdownKbd.wrapWithKbdTagsInActiveEditor.title%",
-          "category": "Markdown Kbd",
-          "when": "editorLangId == markdown"
-        },
-        {
-          "command": "markdownKbd.stripKbdTagsFromActiveEditor",
-          "title": "%markdownKbd.stripKbdTagsFromActiveEditor.title%",
           "category": "Markdown Kbd",
           "when": "editorLangId == markdown"
         },
