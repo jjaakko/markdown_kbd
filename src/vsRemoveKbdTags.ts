@@ -1,7 +1,6 @@
 import * as vscode from "vscode";
 
 import { stripAllKbdTagsFromString } from "./removeKbdTags";
-import { Config } from "./types";
 
 export function stripKbdTagsFromSelectedArea() {
   // Get the active text editor.

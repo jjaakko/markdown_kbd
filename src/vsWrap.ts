@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import {stripAllKbdTagsFromString} from "./removeKbdTags";
 import { wrapKeyNamesWithKbdTags } from "./wrapKeyNamesWithKbdTags";
 import { Config } from "./types";
 
@@ -12,11 +13,11 @@ export function wrapKeyNamesInSelectionWithKbdTags() {
   if (editor && editor.document.languageId === 'markdown') {
     let document = editor.document;
     let selection = editor.selection;
-    const textInSelection = document.getText(selection);
+    // Remove all existing <kbd> tags first.
+    const textInSelection = stripAllKbdTagsFromString(document.getText(selection));
 
     let conf: unknown = vscode.workspace.getConfiguration("markdownKbd");
     const config = conf as Config;
-
     const textWithKbdTags: string = wrapKeyNamesWithKbdTags(
       textInSelection,
       config
