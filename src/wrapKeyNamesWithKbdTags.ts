@@ -70,7 +70,7 @@ export function wrapKeyNamesWithKbdTags_(
         firstChar.length,
         matchedString.length - lastChar.length
       );
-
+      
       // Split matched string by + character
       const stringsSplittedByChar: string[] = matchWithPaddingRemoved.split(
         "+"

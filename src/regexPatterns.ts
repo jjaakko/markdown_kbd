@@ -1,12 +1,10 @@
 export function getRegexForMatchingKeyNamesNotYetWrapped(validKeys: string[]) {
   // Start of a line or non word character.
-  const matchStart = `(?:^|\\W)`;
+  const matchStart = "(^|\\W)";
+  const matchEnd = "($|\\W)";
+  const RegExpStr = matchStart + getRegexMatchingKeyNames(validKeys) + matchEnd;
   const pattern: RegExp = new RegExp(
-    `(?<!<kbd)` + // Prevent <kbd>cmd+i from matching. Note: '>' is consumed as a padding.
-    matchStart +
-    getRegexMatchingKeyNames(validKeys) +
-    "(?:$|\\W)" + // End of line or non word character
-      `(?!\/kbd>)`, // Prevent cmd+i</kbd> from matching. Note: '<' is consumed as a padding.
+    RegExpStr,
     "giu" // All the occurences are matched. Matching is case-insensitive.
   );
   return pattern;

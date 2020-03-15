@@ -22,16 +22,6 @@ suite("Test matching key names that are not yet wrapped with kbd tags.", () => {
     const matches = testString.match(pattern);
     expect(matches).to.eql(expected);
   });
-  test("Regex pattern should not match key names already wrapped with <kbd> tags", () => {
-    const testString = "<kbd>ctrl+i</kbd>";
-    const expected = null;
-    const validKeyNames = ["ctrl", "shift"];
-    const pattern: RegExp = getRegexForMatchingKeyNamesNotYetWrapped(
-      validKeyNames
-    );
-    const matches = testString.match(pattern);
-    expect(matches).to.eql(expected);
-  });
   test("Regex pattern should not match single simple key name combination if key name not valid", () => {
     const testString = "cmd+i";
     const expected = null;
