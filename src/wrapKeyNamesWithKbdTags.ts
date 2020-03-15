@@ -3,6 +3,7 @@ import { validKeyNames } from "./validKeyNames";
 import { Config } from "./types";
 import {
   getRegexForMatchingKeyNamesNotYetWrapped,
+  getRegexMatchingKeyNames
 } from "./regexPatterns";
 import { doReplacement } from "./replace";
 
@@ -49,55 +50,50 @@ export function wrapKeyNamesWithKbdTags_(
   const textWithKbdTags: string = stringWithKeyboardStrings.replace(
     pattern,
     matchedString => {
-      // If we can't use \b we have to use this.
-      let firstChar = "";
-      let lastChar = "";
-      if (
-        matchedString.charAt(0) !== "⌘" &&
-        !matchedString.charAt(0).match(/[a-z]/i)
-      ) {
-        // First char of the first key name was not part of the key name combo, we need to
-        // prepend the result with it
-        firstChar = matchedString.charAt(0);
-      }
-      const last = matchedString.charAt(matchedString.length - 1);
-      if (last !== "⌘" && !last.match(/[a-z]/i)) {
-        // Last char of the last key name was not part of the key name combo, we need to
-        // append the result with it
-        lastChar = last;
-      }
-      const matchWithPaddingRemoved = matchedString.slice(
-        firstChar.length,
-        matchedString.length - lastChar.length
+      
+      const matchKeyNamesOnly = new RegExp(
+        getRegexMatchingKeyNames(validKeyNames),
+        "iu"
       );
       
-      // Split matched string by + character
-      const stringsSplittedByChar: string[] = matchWithPaddingRemoved.split(
-        "+"
-      );
-
-      // Wrap the elements with kbd tags
-      let arrayOfKeyNames: string[] = stringsSplittedByChar.map(
-        (element: string) => {
-          let replacementsDone: string = element.toLowerCase();
-          if (replaceWithIcons) {
-            replacementsDone = doReplacement(element.toLowerCase(), true);
-          }
-          const trimmedElement: string = replacementsDone.trim();
-          const keyNameWithCorrectCase: string = startCase(
-            trimmedElement.toLowerCase()
+      // What we essentially do here is replace "cmd" inside of strings like 
+      // " cmd " or " cmd." and replace it with "<kbd>cmd</kbd>".
+      // Or turn " cmd +i " into " <kbd>cmd</kbd>+<kbd>i<kbd> " 
+      // or "<kbd>cmd+i</kbd>" depending on settings.
+      const keynameCombinationPlusPossiblePadding = matchedString.replace(
+        matchKeyNamesOnly,
+        matchWithPaddingRemoved => {
+          // Split matched string by + character
+          const stringsSplittedByChar: string[] = matchWithPaddingRemoved.split(
+            "+"
           );
+
+          // Wrap the elements with kbd tags
+          let arrayOfKeyNames: string[] = stringsSplittedByChar.map(
+            (element: string) => {
+              let replacementsDone: string = element.toLowerCase();
+              if (replaceWithIcons) {
+                replacementsDone = doReplacement(element.toLowerCase(), true);
+              }
+              const trimmedElement: string = replacementsDone.trim();
+              const keyNameWithCorrectCase: string = startCase(
+                trimmedElement.toLowerCase()
+              );
+              return wrapKeyNamesSeparately
+                ? `<kbd>${keyNameWithCorrectCase}</kbd>`
+                : keyNameWithCorrectCase;
+            }
+          );
+          // Create new string from an array, joining strings with either " + " or "+".
+          const glue = addSpacesAroundPlusSign ? " + " : "+";
+          let stringOfKeyNames: string = arrayOfKeyNames.join(glue);
+
           return wrapKeyNamesSeparately
-            ? `<kbd>${keyNameWithCorrectCase}</kbd>`
-            : keyNameWithCorrectCase;
+            ? stringOfKeyNames
+            : `<kbd>${stringOfKeyNames}</kbd>`;
         }
       );
-      // Create new string from an array, joining strings with either " + " or "+".
-      const glue = addSpacesAroundPlusSign ? " + " : "+";
-      let stringOfKeyNames: string = arrayOfKeyNames.join(glue);
-      const keynameCombinationPlusPossiblePadding = wrapKeyNamesSeparately
-        ? firstChar + stringOfKeyNames + lastChar
-        : firstChar + `<kbd>${stringOfKeyNames}</kbd>` + lastChar;
+
       return keynameCombinationPlusPossiblePadding;
     }
   );

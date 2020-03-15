@@ -64,7 +64,7 @@ export function createRegExp(validKeys: string[]): RegExp {
   return pattern;
 }
 
-function getRegexMatchingKeyNames(validKeys: string[]) {
+export function getRegexMatchingKeyNames(validKeys: string[]) {
   // Helper strings for defining regular expression.
 
   // Pattern matches strings like "cmd", "shift" or "alt".
