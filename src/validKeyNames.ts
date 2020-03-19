@@ -33,6 +33,7 @@ export const keyNamesToIcons = [
   { keyName: "ado", icon: "↓" }
 ];
 
+// Include both a key name and corresponding icon to a single array.
 export const keyNamesWithIconsPlusIcons: string[] = keyNamesToIcons.reduce(
   (previousValue: string[], currentValue) => {
     previousValue = [...previousValue, currentValue.keyName, currentValue.icon];
@@ -41,4 +42,5 @@ export const keyNamesWithIconsPlusIcons: string[] = keyNamesToIcons.reduce(
   []
 );
 
+// Array consisting of all valid keynames or icons.
 export const validKeyNames: string[] = [...keyNamesWithoutIcons, ...keyNamesWithIconsPlusIcons];

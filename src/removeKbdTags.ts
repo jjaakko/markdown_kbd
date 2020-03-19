@@ -1,4 +1,20 @@
 /**
+ * Remove all kbd tags from string.
+ * @param stringWithKbdTags String that may or may not contain kbd tags.
+ */
+export function stripAllKbdTagsFromString(stringWithKbdTags: string) {
+  const pattern: RegExp = new RegExp("<kbd>|</kbd>", "giu");
+  const textWithKbdTagsRemoved = stringWithKbdTags.replace(
+    pattern,
+    (_match, _p1) => {
+      return "";
+    }
+  );
+
+  return textWithKbdTagsRemoved;
+}
+
+/**
  * Strips <kbd> tags from string.
  * @param stringWithKbdTags
  * @returns
@@ -19,15 +35,3 @@
 
 //   return textWithKbdTagsRemoved;
 // }
-
-export function stripAllKbdTagsFromString(stringWithKbdTags: string) {
-  const pattern: RegExp = new RegExp("<kbd>|</kbd>", "giu");
-  const textWithKbdTagsRemoved = stringWithKbdTags.replace(
-    pattern,
-    (_match, _p1) => {
-      return "";
-    }
-  );
-
-  return textWithKbdTagsRemoved;
-}
