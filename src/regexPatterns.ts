@@ -22,48 +22,6 @@ export function getRegexForMatchingKeyNamesWrappedAlready(validKeys: string[]) {
   return pattern;
 }
 
-/**
- * Creates regular expression for matching key combinations.
- *
- * @param validKeys Valid key names.
- * @returns Regular expression.
- */
-// IT APPEARS THIS FUNCTION IS NOT USED!!
-export function createRegExp(validKeys: string[]): RegExp {
-  // Helper strings for defining regular expression.
-
-  // Start of a line or non word character.
-  const matchStart = `(?:^|\\W)`;
-
-  // Pattern matches strings like "cmd", "shift" or "alt".
-  const matchOneOfTheValidKeys: string = `(${validKeys.join("|")})`;
-
-  // Pattern matches strings like " + " or "+".
-  const plusSignWithOptionalSpaces: string = ` ?\\+ ?`;
-
-  // Pattern matches strings like "cmd", "shift" or "b".
-  const matchLetterOrOneOftheValidKeys: string = `([a-z]|(${matchOneOfTheValidKeys}))`;
-
-  // Pattern will match strings such as "cmd + i", "CMD + SHIFT + i", "ctrl + F12" but not
-  // single letters such as "i".
-  const pattern: RegExp = new RegExp(
-    `(?<!<kbd)` + // Prevent <kbd>cmd+i from matching. Note: '>' is consumed as a padding.
-    matchStart +
-    matchOneOfTheValidKeys +
-    plusSignWithOptionalSpaces +
-    matchLetterOrOneOftheValidKeys +
-    `(` + // Start optional capturing group.
-    plusSignWithOptionalSpaces +
-    matchLetterOrOneOftheValidKeys +
-    `){0,5}` + // End optional capturing group.
-    "(?:$|\\W)" + // End of line or non word character
-      `(?!\/kbd>)`, // Prevent cmd+i</kbd> from matching. Note: '<' is consumed as a padding.
-    "giu" // All the occurences are matched. Matching is case-insensitive.
-  );
-
-  return pattern;
-}
-
 export function getRegexMatchingKeyNames(validKeys: string[]) {
   // Helper strings for defining regular expression.
 
