@@ -2,6 +2,11 @@ import * as vscode from "vscode";
 
 import { stripAllKbdTagsFromString } from "./removeKbdTags";
 
+/**
+ * Remove kbd tags from selection.
+ * 
+ * @todo handle multiple selections, probably works for only one selection currently.
+ */
 export function stripKbdTagsFromSelectedArea() {
   // Get the active text editor.
   let editor: vscode.TextEditor = vscode.window.activeTextEditor!;

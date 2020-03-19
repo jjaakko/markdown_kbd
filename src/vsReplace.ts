@@ -2,6 +2,10 @@ import * as vscode from "vscode";
 import { replaceKeynameWithIconOrViceVersa } from "./replace";
 import { Config } from "./types";
 
+/**
+ * Replace keynames with icons or vice versa.
+ * @param replaceWithIcons Setting indicating whether to replace key name with icon or vice versa.
+ */
 export function vsReplace(replaceWithIcons: boolean) {
   // Get the active text editor.
   let editor: vscode.TextEditor = vscode.window.activeTextEditor!;

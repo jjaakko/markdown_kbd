@@ -4,7 +4,7 @@ import { wrapKeyNamesWithKbdTags } from "./wrapKeyNamesWithKbdTags";
 import { Config } from "./types";
 
 /**
- * Wraps key names in selection with kbd tags.
+ * Wrap key names in selection with kbd tags.
  */
 export function wrapKeyNamesInSelectionWithKbdTags() {
   // Get the active text editor.
