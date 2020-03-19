@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { doReplacement } from "./replace";
+import { replaceKeynameWithIconOrViceVersa } from "./replace";
 import { Config } from "./types";
 
 export function vsReplace(replaceWithIcons: boolean) {
@@ -11,7 +11,7 @@ export function vsReplace(replaceWithIcons: boolean) {
     let selection = editor.selection;
     const textInSelection = document.getText(selection);
 
-    const newText: string = doReplacement(
+    const newText: string = replaceKeynameWithIconOrViceVersa(
       textInSelection,
       replaceWithIcons
     );

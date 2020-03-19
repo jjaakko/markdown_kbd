@@ -5,7 +5,7 @@ import {
   getRegexForMatchingKeyNamesNotYetWrapped,
   getRegexMatchingKeyNames
 } from "./regexPatterns";
-import { doReplacement } from "./replace";
+import { replaceKeynameWithIconOrViceVersa } from "./replace";
 
 /**
  * Provide default configuration and wrap key names with kbd tags.
@@ -79,7 +79,7 @@ export function wrapKeyNamesWithKbdTags_(
               let replacementsDone: string = element.toLowerCase();
               if (replaceWithIcons) {
                 // Replace 'cmd' with '⌘' for example.
-                replacementsDone = doReplacement(element.toLowerCase(), true);
+                replacementsDone = replaceKeynameWithIconOrViceVersa(element.toLowerCase(), true);
               }
               const trimmedElement: string = replacementsDone.trim();
               const keyNameWithCorrectCase: string = startCase(
@@ -120,7 +120,7 @@ function wrapIndividualKeynameIfSettingsSaySo(
   individualKeyName: string
 ): string {
   const result: string = wrapKeyNamesSeparately
-    ? `<kbd>${individualKeyName}</bd>`
+    ? `<kbd>${individualKeyName}</kbd>`
     : individualKeyName;
   return result;
 }

@@ -1,17 +1,22 @@
 import { startCase } from "lodash";
 import { keyNamesToIcons } from "./validKeyNames";
 
-export function doReplacement(
+/**
+ * Get a new string where keynames have been replaced icons or vice versa.
+ * @param text Text that will be looked for replacements.
+ * @param replaceKeynameWithIcon Whether to replace keyname with icon or vice versa.
+ */
+export function replaceKeynameWithIconOrViceVersa(
   text: string,
-  replaceTextWithIcons: boolean
+  replaceKeynameWithIcon: boolean
 ): string {
   if (!text) {
     return "";
   }
-  const propertyNameIndicatingWhatIsBeingSearched: string = replaceTextWithIcons
+  const propertyNameIndicatingWhatIsBeingSearched: string = replaceKeynameWithIcon
     ? "keyName"
     : "icon";
-  const propertyNameIndicatingReplaceValue: string = replaceTextWithIcons
+  const propertyNameIndicatingReplaceValue: string = replaceKeynameWithIcon
     ? "icon"
     : "keyName";
   const result = keyNamesToIcons.reduce(
@@ -30,7 +35,7 @@ export function doReplacement(
           // Yet when text is to be replaced with an icon, let's not try to change casing
           // of an icon.
           const keyNameOrIcon = arr[index][propertyNameIndicatingReplaceValue];
-          const keyNameOrIconWithCorrectCasing = replaceTextWithIcons ? keyNameOrIcon : startCase(keyNameOrIcon);
+          const keyNameOrIconWithCorrectCasing = replaceKeynameWithIcon ? keyNameOrIcon : startCase(keyNameOrIcon);
           const replacement = match.replace(p2, keyNameOrIconWithCorrectCasing);
           return replacement;
         }
