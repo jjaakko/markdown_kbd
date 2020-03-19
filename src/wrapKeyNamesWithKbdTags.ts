@@ -8,10 +8,10 @@ import {
 import { doReplacement } from "./replace";
 
 /**
- * Providing default configuration and wrap key names with kbd tags.
+ * Provide default configuration and wrap key names with kbd tags.
  * @param stringWithKeyboardStrings
  * @param config
- * @returns key names with kbd tags
+ * @returns Key wrapped with kbd tags.
  */
 export function wrapKeyNamesWithKbdTags(
   stringWithKeyboardStrings: string,
@@ -29,9 +29,9 @@ export function wrapKeyNamesWithKbdTags(
 
   const result = wrapKeyNamesWithKbdTags_(
     stringWithKeyboardStrings,
-    effectiveConfig,
-    getRegexForMatchingKeyNamesNotYetWrapped
+    effectiveConfig
   );
+
   return result;
 }
 
@@ -43,54 +43,63 @@ export function wrapKeyNamesWithKbdTags(
  */
 export function wrapKeyNamesWithKbdTags_(
   stringWithKeyboardStrings: string,
-  { wrapKeyNamesSeparately, addSpacesAroundPlusSign, replaceWithIcons }: Config,
-  getRegexForMatchingKeyNameCombinations
+  { wrapKeyNamesSeparately, addSpacesAroundPlusSign, replaceWithIcons }: Config
 ): string {
-  const pattern: RegExp = getRegexForMatchingKeyNameCombinations(validKeyNames);
+  // Get pattern to match strings such as ' cmd+i ' or ' cmd+i.' or '-cmd+i '.
+  // We need to match the immediate surrounding characters (or meta character such as end of line)
+  // to not match keynames in the middle of words like 'alt' in the middle of word 'halt'.
+  const pattern: RegExp = getRegexForMatchingKeyNamesNotYetWrapped(
+    validKeyNames
+  );
   const textWithKbdTags: string = stringWithKeyboardStrings.replace(
     pattern,
     matchedString => {
-      
+      // Get regex pattern for matching a key name only to match "cmd+i" from a string
+      // such as " cmd+i ".
       const matchKeyNamesOnly = new RegExp(
         getRegexMatchingKeyNames(validKeyNames),
         "iu"
       );
-      
-      // What we essentially do here is replace "cmd" inside of strings like 
+
+      // What we essentially do here is replace "cmd" inside of strings like
       // " cmd " or " cmd." and replace it with "<kbd>cmd</kbd>".
-      // Or turn " cmd +i " into " <kbd>cmd</kbd>+<kbd>i<kbd> " 
+      // Or turn " cmd +i " into " <kbd>cmd</kbd>+<kbd>i<kbd> "
       // or "<kbd>cmd+i</kbd>" depending on settings.
       const keynameCombinationPlusPossiblePadding = matchedString.replace(
         matchKeyNamesOnly,
         matchWithPaddingRemoved => {
-          // Split matched string by + character
+          // Split matched string using '+' character.
           const stringsSplittedByChar: string[] = matchWithPaddingRemoved.split(
             "+"
           );
 
-          // Wrap the elements with kbd tags
+          // Wrap the whole string or parts of it with kbd tags.
           let arrayOfKeyNames: string[] = stringsSplittedByChar.map(
             (element: string) => {
               let replacementsDone: string = element.toLowerCase();
               if (replaceWithIcons) {
+                // Replace 'cmd' with '⌘' for example.
                 replacementsDone = doReplacement(element.toLowerCase(), true);
               }
               const trimmedElement: string = replacementsDone.trim();
               const keyNameWithCorrectCase: string = startCase(
                 trimmedElement.toLowerCase()
               );
-              return wrapKeyNamesSeparately
-                ? `<kbd>${keyNameWithCorrectCase}</kbd>`
-                : keyNameWithCorrectCase;
+              return wrapIndividualKeynameIfSettingsSaySo(
+                wrapKeyNamesSeparately,
+                keyNameWithCorrectCase
+              );
             }
           );
+
           // Create new string from an array, joining strings with either " + " or "+".
           const glue = addSpacesAroundPlusSign ? " + " : "+";
           let stringOfKeyNames: string = arrayOfKeyNames.join(glue);
 
-          return wrapKeyNamesSeparately
-            ? stringOfKeyNames
-            : `<kbd>${stringOfKeyNames}</kbd>`;
+          return wrapKeyNameCombinationIfSettingsSaySo(
+            wrapKeyNamesSeparately,
+            stringOfKeyNames
+          );
         }
       );
 
@@ -99,4 +108,34 @@ export function wrapKeyNamesWithKbdTags_(
   );
 
   return textWithKbdTags;
+}
+
+/**
+ * Wrap individual keyname with kbd tags if settings indicate it should be done.
+ * @param wrapKeyNamesSeparately Setting indicating whether to wrap individual keynames.
+ * @param individualKeyName Individual keyname, such as 'ctrl' or 'esc'.
+ */
+function wrapIndividualKeynameIfSettingsSaySo(
+  wrapKeyNamesSeparately: boolean,
+  individualKeyName: string
+): string {
+  const result: string = wrapKeyNamesSeparately
+    ? `<kbd>${individualKeyName}</bd>`
+    : individualKeyName;
+  return result;
+}
+
+/**
+ * Wrap the whole keyname combination with kbd tags if settings indicate it should be done.
+ * @param wrapKeyNamesSeparately Setting indicating whether to wrap individual keynames.
+ * @param stringOfKeyNames Keyname combination, such as 'ctrl+i' or 'esc'.
+ */
+function wrapKeyNameCombinationIfSettingsSaySo(
+  wrapKeyNamesSeparately: boolean,
+  stringOfKeyNames: string
+): string {
+  const result: string = wrapKeyNamesSeparately
+    ? stringOfKeyNames
+    : `<kbd>${stringOfKeyNames}</kbd>`;
+  return result;
 }
