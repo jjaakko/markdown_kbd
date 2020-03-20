@@ -2,6 +2,7 @@ import chai = require("chai");
 import sinon = require("sinon");
 import "mocha";
 
+import {validKeyNames} from "../../validKeyNames";
 import { wrapKeyNamesWithKbdTags } from "../../wrapKeyNamesWithKbdTags.js";
 import { Config } from "../../types";
 import * as regexPatternsModule from "../../regexPatterns.js";
@@ -17,7 +18,7 @@ suite(
     let defaultConfig: Config = {
       wrapKeyNamesSeparately: true,
       addSpacesAroundPlusSign: false,
-      replaceWithIcons: false
+      replaceKeyNamesWithIcons: false
     };
 
     let stub = sinon.stub();
@@ -62,7 +63,7 @@ suite(
       const config = Object.assign({}, defaultConfig, {
         wrapKeyNamesSeparately: false,
         addSpacesAroundPlusSign: true,
-        replaceWithIcons: false
+        replaceKeyNamesWithIcons: false
       });
       const input: string = "ctrl+i";
       const validKeys = ["ctrl"];
@@ -75,7 +76,7 @@ suite(
       const config = Object.assign({}, defaultConfig, {
         wrapKeyNamesSeparately: false,
         addSpacesAroundPlusSign: false,
-        replaceWithIcons: false
+        replaceKeyNamesWithIcons: false
       });
       const input: string = "ctrl+i";
       const validKeys = ["ctrl"];
@@ -120,7 +121,7 @@ suite(
 
     test("Should replace cmd with ⌘", () => {
       const config = Object.assign({}, defaultConfig, {
-        replaceWithIcons: true
+        replaceKeyNamesWithIcons: true
       });
       const input: string = "cmd+i";
       const validKeys = ["cmd"];
@@ -131,7 +132,7 @@ suite(
 
     test("Should replace opt with ⌥", () => {
       const config = Object.assign({}, defaultConfig, {
-        replaceWithIcons: true
+        replaceKeyNamesWithIcons: true
       });
       const input: string = "opt+i";
       const validKeys = ["opt"];
@@ -142,7 +143,7 @@ suite(
 
     test("Should not replace alt with ⌥", () => {
       const config = Object.assign({}, defaultConfig, {
-        replaceWithIcons: true
+        replaceKeyNamesWithIcons: true
       });
       const input: string = "alt+i";
       const validKeys = ["alt"];
@@ -151,14 +152,26 @@ suite(
       expect(output.toString()).to.equal(expected);
     });
 
-    test("Should !!!", () => {
+    test("Should wrap alt + arrUp etc.", () => {
       const config = Object.assign({}, defaultConfig, {
         wrapKeyNamesSeparately: false,
-        replaceWithIcons: false
+        replaceKeyNamesWithIcons: false
       });                                    
       const input = "|  alt + arrUp or alt + arrDown.";
       const expected = "|  <kbd>Alt+Arrup</kbd> or <kbd>Alt+Arrdown</kbd>.";
       const validKeys = ["alt", "arrUp", "arrDown"];
+      const output: string = wrapKeyNamesWithKbdTags(input, config, validKeys);
+      expect(output.toString()).to.equal(expected);
+    });
+
+    test("Should wrap F12", () => {
+      const config = Object.assign({}, defaultConfig, {
+        wrapKeyNamesSeparately: false,
+        replaceKeyNamesWithIcons: false
+      });                                    
+      const input = "Rename symbol | F12";
+      const expected = "Rename symbol | <kbd>F12</kbd>";
+      const validKeys = validKeyNames;
       const output: string = wrapKeyNamesWithKbdTags(input, config, validKeys);
       expect(output.toString()).to.equal(expected);
     });
