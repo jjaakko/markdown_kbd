@@ -22,7 +22,7 @@ export function wrapKeyNamesWithKbdTags(
     {
       wrapKeyNamesSeparately: false,
       addSpacesAroundPlusSign: false,
-      replaceWithIcons: true
+      replaceKeyNamesWithIcons: true
     },
     config
   );
@@ -44,17 +44,13 @@ export function wrapKeyNamesWithKbdTags(
  */
 export function wrapKeyNamesWithKbdTags_(
   stringWithKeyboardStrings: string,
-  { wrapKeyNamesSeparately, addSpacesAroundPlusSign, replaceWithIcons }: Config,
+  { wrapKeyNamesSeparately, addSpacesAroundPlusSign, replaceKeyNamesWithIcons }: Config,
   validKeys
 ): string {
   // Get pattern to match strings such as ' cmd+i ' or ' cmd+i.' or '-cmd+i '.
   // We need to match the immediate surrounding characters (or meta character such as end of line)
   // to not match keynames in the middle of words like 'alt' in the middle of word 'halt'.
   const pattern: RegExp = getRegexForMatchingKeyNamesNotYetWrapped(validKeys);
-  // console.log(stringWithKeyboardStrings);
-  // console.log(pattern);
-  // HUOM! modifikaattori on väärä, m eli multiline ei näy. validKeyNames on joku objekti.
-  // Vika tässä???
   const textWithKbdTags: string = stringWithKeyboardStrings.replace(
     pattern,
     matchedString => {
@@ -64,9 +60,6 @@ export function wrapKeyNamesWithKbdTags_(
         getRegexMatchingKeyNames(validKeys),
         "iu"
       );
-      // console.log("PATTERNIII2");
-      console.log(matchKeyNamesOnly);
-      console.log(matchedString);
       // What we essentially do here is replace "cmd" inside of strings like
       // " cmd " or " cmd." and replace it with "<kbd>cmd</kbd>".
       // Or turn " cmd +i " into " <kbd>cmd</kbd>+<kbd>i<kbd> "
@@ -83,20 +76,25 @@ export function wrapKeyNamesWithKbdTags_(
           let arrayOfKeyNames: string[] = stringsSplittedByChar.map(
             (element: string) => {
               let replacementsDone: string = element.toLowerCase();
-              if (replaceWithIcons) {
+              if (replaceKeyNamesWithIcons) {
                 // Replace 'cmd' with '⌘' for example.
                 replacementsDone = replaceKeynameWithIconOrViceVersa(
                   element.toLowerCase(),
                   true
                 );
               }
-              const trimmedElement: string = replacementsDone.trim();
               const keyNameWithCorrectCase: string = startCase(
-                trimmedElement.toLowerCase()
+                replacementsDone.toLowerCase()
+              );
+              // StartCase converts "F12" to "F1 2".
+              // Remove spaces from the string.
+              const spacesRemoved: string = keyNameWithCorrectCase.replace(
+                " ",
+                ""
               );
               return wrapIndividualKeynameIfSettingsSaySo(
                 wrapKeyNamesSeparately,
-                keyNameWithCorrectCase
+                spacesRemoved
               );
             }
           );
@@ -105,7 +103,6 @@ export function wrapKeyNamesWithKbdTags_(
           const glue = addSpacesAroundPlusSign ? " + " : "+";
           let stringOfKeyNames: string = arrayOfKeyNames.join(glue);
 
-          // return "HEllO";
           return wrapKeyNameCombinationIfSettingsSaySo(
             wrapKeyNamesSeparately,
             stringOfKeyNames
