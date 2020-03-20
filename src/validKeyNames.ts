@@ -3,6 +3,11 @@ export const keyNamesWithoutIcons = [
   "esc",
   "tab",
   "space",
+  // The order matters here. More specific string has to be listed first.
+  // Otherwise "F1" is found as a valid string from "F10" which should not happen.
+  "F10", 
+  "F11",
+  "F12",
   "F1",
   "F2",
   "F3",
@@ -12,9 +17,6 @@ export const keyNamesWithoutIcons = [
   "F7",
   "F8",
   "F9",
-  "F10",
-  "F11",
-  "F12"
 ];
 
 // See https://wincent.com/wiki/Unicode_representations_of_modifier_keys
