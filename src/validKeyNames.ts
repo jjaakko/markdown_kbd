@@ -27,10 +27,10 @@ export const keyNamesToIcons = [
   { keyName: "pageup", icon: "⇞" },
   { keyName: "pagedown", icon: "⇟" },
   { keyName: "backspace", icon: "⌫" },
-  { keyName: "arl", icon: "→" },
-  { keyName: "arr", icon: "→" },
-  { keyName: "aup", icon: "↑" },
-  { keyName: "ado", icon: "↓" }
+  { keyName: "arrRight", icon: "→" },
+  { keyName: "arrLeft", icon: "←" },
+  { keyName: "arrUp", icon: "↑" },
+  { keyName: "arrDown", icon: "↓" }
 ];
 
 // Include both a key name and corresponding icon to a single array.
@@ -44,3 +44,5 @@ export const keyNamesWithIconsPlusIcons: string[] = keyNamesToIcons.reduce(
 
 // Array consisting of all valid keynames or icons.
 export const validKeyNames: string[] = [...keyNamesWithoutIcons, ...keyNamesWithIconsPlusIcons];
+
+// export const validKeyNames: string[] = keyNamesWithoutIcons;

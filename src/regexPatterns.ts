@@ -8,14 +8,14 @@ export function getRegexForMatchingKeyNamesNotYetWrapped(validKeys: string[]) {
   // Start of a line or non word character.
   const matchStart = "(^|\\W)";
   // Non word character or end of a line.
-  const matchEnd = "($|\\W)";
+  const matchEnd = "(\\W|$)";
 
   // Using matchStart and matchEnd makes it possible to match string like 'hit alt + z to wrap lines'
   // but not words like 'halt'.
   const RegExpStr = matchStart + getRegexMatchingKeyNames(validKeys) + matchEnd;
   const pattern: RegExp = new RegExp(
     RegExpStr,
-    "gium" // All the occurences are matched. Matching is case-insensitive.
+    "giu" // All the occurences are matched. Matching is case-insensitive.
   );
   return pattern;
 }

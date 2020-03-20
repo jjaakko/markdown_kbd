@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import {stripAllKbdTagsFromString} from "./removeKbdTags";
+import { validKeyNames } from "./validKeyNames";
 import { wrapKeyNamesWithKbdTags } from "./wrapKeyNamesWithKbdTags";
 import { Config } from "./types";
 
@@ -20,7 +21,8 @@ export function wrapKeyNamesInSelectionWithKbdTags() {
     const config = conf as Config;
     const textWithKbdTags: string = wrapKeyNamesWithKbdTags(
       textInSelection,
-      config
+      config,
+      validKeyNames
     );
 
     editor.edit(editBuilder => {

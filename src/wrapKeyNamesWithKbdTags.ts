@@ -1,5 +1,4 @@
 import { startCase } from "lodash";
-import { validKeyNames } from "./validKeyNames";
 import { Config } from "./types";
 import {
   getRegexForMatchingKeyNamesNotYetWrapped,
@@ -15,7 +14,8 @@ import { replaceKeynameWithIconOrViceVersa } from "./replace";
  */
 export function wrapKeyNamesWithKbdTags(
   stringWithKeyboardStrings: string,
-  config: Config
+  config: Config,
+  validKeys
 ): string {
   // Provide default config, which can be overridden with the actual config parameter
   const effectiveConfig: Config = Object.assign(
@@ -29,7 +29,8 @@ export function wrapKeyNamesWithKbdTags(
 
   const result = wrapKeyNamesWithKbdTags_(
     stringWithKeyboardStrings,
-    effectiveConfig
+    effectiveConfig,
+    validKeys
   );
 
   return result;
@@ -43,24 +44,29 @@ export function wrapKeyNamesWithKbdTags(
  */
 export function wrapKeyNamesWithKbdTags_(
   stringWithKeyboardStrings: string,
-  { wrapKeyNamesSeparately, addSpacesAroundPlusSign, replaceWithIcons }: Config
+  { wrapKeyNamesSeparately, addSpacesAroundPlusSign, replaceWithIcons }: Config,
+  validKeys
 ): string {
   // Get pattern to match strings such as ' cmd+i ' or ' cmd+i.' or '-cmd+i '.
   // We need to match the immediate surrounding characters (or meta character such as end of line)
   // to not match keynames in the middle of words like 'alt' in the middle of word 'halt'.
-  const pattern: RegExp = getRegexForMatchingKeyNamesNotYetWrapped(
-    validKeyNames
-  );
+  const pattern: RegExp = getRegexForMatchingKeyNamesNotYetWrapped(validKeys);
+  // console.log(stringWithKeyboardStrings);
+  // console.log(pattern);
+  // HUOM! modifikaattori on väärä, m eli multiline ei näy. validKeyNames on joku objekti.
+  // Vika tässä???
   const textWithKbdTags: string = stringWithKeyboardStrings.replace(
     pattern,
     matchedString => {
       // Get regex pattern for matching a key name only to match "cmd+i" from a string
       // such as " cmd+i ".
       const matchKeyNamesOnly = new RegExp(
-        getRegexMatchingKeyNames(validKeyNames),
+        getRegexMatchingKeyNames(validKeys),
         "iu"
       );
-
+      // console.log("PATTERNIII2");
+      console.log(matchKeyNamesOnly);
+      console.log(matchedString);
       // What we essentially do here is replace "cmd" inside of strings like
       // " cmd " or " cmd." and replace it with "<kbd>cmd</kbd>".
       // Or turn " cmd +i " into " <kbd>cmd</kbd>+<kbd>i<kbd> "
@@ -79,7 +85,10 @@ export function wrapKeyNamesWithKbdTags_(
               let replacementsDone: string = element.toLowerCase();
               if (replaceWithIcons) {
                 // Replace 'cmd' with '⌘' for example.
-                replacementsDone = replaceKeynameWithIconOrViceVersa(element.toLowerCase(), true);
+                replacementsDone = replaceKeynameWithIconOrViceVersa(
+                  element.toLowerCase(),
+                  true
+                );
               }
               const trimmedElement: string = replacementsDone.trim();
               const keyNameWithCorrectCase: string = startCase(
@@ -96,6 +105,7 @@ export function wrapKeyNamesWithKbdTags_(
           const glue = addSpacesAroundPlusSign ? " + " : "+";
           let stringOfKeyNames: string = arrayOfKeyNames.join(glue);
 
+          // return "HEllO";
           return wrapKeyNameCombinationIfSettingsSaySo(
             wrapKeyNamesSeparately,
             stringOfKeyNames
