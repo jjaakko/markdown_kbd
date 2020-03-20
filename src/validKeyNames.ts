@@ -21,7 +21,7 @@ export const keyNamesWithoutIcons = [
 export const keyNamesToIcons = [
   { keyName: "cmd", icon: "⌘" },
   { keyName: "shift", icon: "⇧" },
-  { keyName: "ctrl", icon: "^" },
+  { keyName: "ctrl", icon: "\\^" },
   { keyName: "opt", icon: "⌥" },
   { keyName: "ret", icon: "⏎" },
   { keyName: "pageup", icon: "⇞" },
@@ -44,5 +44,6 @@ export const keyNamesWithIconsPlusIcons: string[] = keyNamesToIcons.reduce(
 
 // Array consisting of all valid keynames or icons.
 export const validKeyNames: string[] = [...keyNamesWithoutIcons, ...keyNamesWithIconsPlusIcons];
-
+const matchOneOfTheValidKeys: string = `(${validKeyNames.join("|")})`;
+console.log(matchOneOfTheValidKeys);
 // export const validKeyNames: string[] = keyNamesWithoutIcons;
