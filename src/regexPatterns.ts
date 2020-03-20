@@ -6,9 +6,9 @@ import { validKeyNames } from "./validKeyNames";
  */
 export function getRegexForMatchingKeyNamesNotYetWrapped(validKeys: string[]) {
   // Start of a line or non word character.
-  const matchStart = "(^|\\W)";
+  const matchStart = "(^|[^a-z0-9])";
   // Non word character or end of a line.
-  const matchEnd = "(\\W|$)";
+  const matchEnd = "([^a-z0-9]|$)";
 
   // Using matchStart and matchEnd makes it possible to match string like 'hit alt + z to wrap lines'
   // but not words like 'halt'.
@@ -58,12 +58,13 @@ export function getRegexMatchingKeyNames(validKeys: string[]) {
   // Pattern will match strings such as "cmd + i", "CMD + SHIFT + i", "ctrl + F12" but not
   // single letters such as "i".
   const pattern: string =
+  `((`+ 
     matchOneOfTheValidKeys +
     plusSignWithOptionalSpaces +
     matchLetterOrOneOftheValidKeys +
     `(` + // Start optional capturing group.
     plusSignWithOptionalSpaces +
     matchLetterOrOneOftheValidKeys +
-    `){0,5}`; // End optional capturing group.
+    `){0,5})|(${matchOneOfTheValidKeys}))`; // End optional capturing group.
   return pattern;
 }
