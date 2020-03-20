@@ -1,3 +1,5 @@
+import { validKeyNames } from "./validKeyNames";
+
 /**
  * Get regex pattern to match those keyname combinations that are not yet wrapped iwth kbd tag.
  * @param validKeys Array of valid key names.
@@ -13,7 +15,7 @@ export function getRegexForMatchingKeyNamesNotYetWrapped(validKeys: string[]) {
   const RegExpStr = matchStart + getRegexMatchingKeyNames(validKeys) + matchEnd;
   const pattern: RegExp = new RegExp(
     RegExpStr,
-    "giu" // All the occurences are matched. Matching is case-insensitive.
+    "gium" // All the occurences are matched. Matching is case-insensitive.
   );
   return pattern;
 }
@@ -31,7 +33,7 @@ export function getRegexForMatchingKeyNamesWrappedAlready(validKeys: string[]) {
       getRegexMatchingKeyNames(validKeys) +
       `)` +
       `</kbd>`,
-    "giu" // Make sure we only match key names wrapped with <kbd> tags. // All the occurences are matched. Matching is case-insensitive.
+    "gium" // Make sure we only match key names wrapped with <kbd> tags. // All the occurences are matched. Matching is case-insensitive.
   );
   return pattern;
 }
@@ -51,18 +53,21 @@ export function getRegexMatchingKeyNames(validKeys: string[]) {
   const plusSignWithOptionalSpaces: string = ` ?\\+ ?`;
 
   // Pattern matches strings like "cmd", "shift" or "b".
-  const matchLetterOrOneOftheValidKeys: string = `([a-z]|(${matchOneOfTheValidKeys}))`;
+  const matchLetterOrOneOftheValidKeys: string = `(${matchOneOfTheValidKeys}|[a-z])`;
 
   // Pattern will match strings such as "cmd + i", "CMD + SHIFT + i", "ctrl + F12" but not
   // single letters such as "i".
   const pattern: string =
+  '((' +
     matchOneOfTheValidKeys +
     plusSignWithOptionalSpaces +
     matchLetterOrOneOftheValidKeys +
     `(` + // Start optional capturing group.
     plusSignWithOptionalSpaces +
     matchLetterOrOneOftheValidKeys +
-    `){0,5}`; // End optional capturing group.
-
+    `){0,5}` + // End optional capturing group.
+    ')|' +
+    matchOneOfTheValidKeys +
+    ')';
   return pattern;
 }
