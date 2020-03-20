@@ -1,4 +1,4 @@
-import { startCase } from "lodash";
+import { startCase, camelCase } from "lodash";
 import { keyNamesToIcons } from "./validKeyNames";
 
 /**
@@ -35,12 +35,20 @@ export function replaceKeynameWithIconOrViceVersa(
           // Yet when text is to be replaced with an icon, let's not try to change casing
           // of an icon.
           const keyNameOrIcon = arr[index][propertyNameIndicatingReplaceValue];
-          const keyNameOrIconWithCorrectCasing = replaceKeynameWithIcon ? keyNameOrIcon : startCase(keyNameOrIcon);
-          const replacement = match.replace(p2, keyNameOrIconWithCorrectCasing);
+          const keyNameOrIconWithCorrectCasing = replaceKeynameWithIcon
+            ? keyNameOrIcon
+            : ( keyNameOrIcon === keyNameOrIcon.toLowerCase() ? startCase(keyNameOrIcon): keyNameOrIcon);
+          // startCases turns "arrUp" to "Arr Up"
+          const spacesReplaced = keyNameOrIconWithCorrectCasing.replace(
+            " ",
+            ""
+          );
+          // const final = spacesReplaced.charAt(0).toLowerCase() + spacesReplaced.slice(1);
+          const replacement = match.replace(p2, spacesReplaced);
           return replacement;
         }
       );
-      
+
       return accumulator;
     },
     text
