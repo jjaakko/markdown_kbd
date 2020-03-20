@@ -58,16 +58,12 @@ export function getRegexMatchingKeyNames(validKeys: string[]) {
   // Pattern will match strings such as "cmd + i", "CMD + SHIFT + i", "ctrl + F12" but not
   // single letters such as "i".
   const pattern: string =
-  '((' +
     matchOneOfTheValidKeys +
     plusSignWithOptionalSpaces +
     matchLetterOrOneOftheValidKeys +
     `(` + // Start optional capturing group.
     plusSignWithOptionalSpaces +
     matchLetterOrOneOftheValidKeys +
-    `){0,5}` + // End optional capturing group.
-    ')|' +
-    matchOneOfTheValidKeys +
-    ')';
+    `){0,5}`; // End optional capturing group.
   return pattern;
 }
