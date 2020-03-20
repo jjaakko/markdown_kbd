@@ -37,7 +37,7 @@ export function replaceKeynameWithIconOrViceVersa(
           const keyNameOrIcon = arr[index][propertyNameIndicatingReplaceValue];
           const keyNameOrIconWithCorrectCasing = replaceKeynameWithIcon
             ? keyNameOrIcon
-            : ( keyNameOrIcon === keyNameOrIcon.toLowerCase() ? startCase(keyNameOrIcon): keyNameOrIcon);
+            : startCase(keyNameOrIcon);
           // startCases turns "arrUp" to "Arr Up"
           const spacesReplaced = keyNameOrIconWithCorrectCasing.replace(
             " ",
