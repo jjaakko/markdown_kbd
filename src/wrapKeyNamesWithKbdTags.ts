@@ -1,4 +1,3 @@
-import { startCase } from "lodash";
 import { Config } from "./types";
 import {
   getRegexForMatchingKeyNamesNotYetWrapped,
@@ -83,9 +82,8 @@ export function wrapKeyNamesWithKbdTags_(
                   true
                 );
               }
-              const keyNameWithCorrectCase: string = startCase(
-                replacementsDone.toLowerCase()
-              );
+              const keyNameWithCorrectCase: string =  replacementsDone.charAt(0) + replacementsDone.slice(1).toLowerCase();
+            
               // StartCase converts "F12" to "F1 2".
               // Remove spaces from the string.
               const spacesRemoved: string = keyNameWithCorrectCase.replace(

@@ -1,5 +1,5 @@
 import { startCase, camelCase } from "lodash";
-import { keyNamesToIcons } from "./validKeyNames";
+import { keyNamesToIcons, keyNamesAndIconsForReplaceOperations } from "./validKeyNames";
 
 /**
  * Get a new string where keynames have been replaced icons or vice versa.
@@ -34,7 +34,10 @@ export function replaceKeynameWithIconOrViceVersa(
           // Handle casing. For example, icon ⌘ should be replaced with "Cmd" instead of "cmd".
           // Yet when text is to be replaced with an icon, let's not try to change casing
           // of an icon.
-          const keyNameOrIcon = arr[index][propertyNameIndicatingReplaceValue];
+          let keyNameOrIcon = keyNamesAndIconsForReplaceOperations[index][propertyNameIndicatingReplaceValue];
+          // if (propertyNameIndicatingReplaceValue === "ctrl") {
+
+          // }
           const keyNameOrIconWithCorrectCasing = replaceKeynameWithIcon
             ? keyNameOrIcon
             : startCase(keyNameOrIcon);
