@@ -1,7 +1,6 @@
 export const keyNamesWithoutIcons = [
   "alt",
   "esc",
-  "tab",
   "space",
   // The order matters here. More specific string has to be listed first.
   // Otherwise "F1" is found as a valid string from "F10" which should not happen.
@@ -34,7 +33,8 @@ export const keyNamesToIcons = [
   { keyName: "arrRight", icon: "→" },
   { keyName: "arrLeft", icon: "←" },
   { keyName: "arrUp", icon: "↑" },
-  { keyName: "arrDown", icon: "↓" }
+  { keyName: "arrDown", icon: "↓" },
+  { keyName: "tab", icon: "⇥" }
 ];
 
 // Construct separate array to be used when replacing keynames with icons or vice versa.
@@ -67,6 +67,5 @@ export const validKeyNames: string[] = [
   ...keyNamesWithoutIcons,
   ...keyNamesWithIconsPlusIcons
 ];
-const matchOneOfTheValidKeys: string = `(${validKeyNames.join("|")})`;
-console.log(matchOneOfTheValidKeys);
-// export const validKeyNames: string[] = keyNamesWithoutIcons;
+
+console.log(validKeyNames);
