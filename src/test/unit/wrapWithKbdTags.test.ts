@@ -2,7 +2,7 @@ import chai = require("chai");
 import sinon = require("sinon");
 import "mocha";
 
-import {validKeyNames} from "../../validKeyNames";
+import { validKeyNames } from "../../validKeyNames";
 import { wrapKeyNamesWithKbdTags } from "../../wrapKeyNamesWithKbdTags.js";
 import { Config } from "../../types";
 import * as regexPatternsModule from "../../regexPatterns.js";
@@ -28,7 +28,6 @@ suite(
       //   regexPatternsModule,
       //   "getRegexForMatchingKeyNamesNotYetWrapped"
       // );
-
       // stub.returns(
       //   new RegExp(
       //     /(?:^|\W)(ctrl|alt|opt|cmd|shift|⌥|⌘) ?\+ ?([a-z]|((ctrl|alt|opt|cmd|shift|⌥|⌘)))( ?\+ ?([a-z]|((ctrl|alt|opt|cmd|shift|⌥|⌘)))){0,5}(?:$|\W)/giu
@@ -46,7 +45,7 @@ suite(
       const validKeys = ["ctrl"];
       const output: string = wrapKeyNamesWithKbdTags(input, config, validKeys);
       const expected: string = "<kbd>Ctrl</kbd>+<kbd>I</kbd>";
-      
+
       expect(output).to.equal(expected);
     });
 
@@ -156,7 +155,7 @@ suite(
       const config = Object.assign({}, defaultConfig, {
         wrapKeyNamesSeparately: false,
         replaceKeyNamesWithIcons: false
-      });                                    
+      });
       const input = "|  alt + arrUp or alt + arrDown.";
       const expected = "|  <kbd>Alt+Arrup</kbd> or <kbd>Alt+Arrdown</kbd>.";
       const validKeys = ["alt", "arrUp", "arrDown"];
@@ -168,9 +167,21 @@ suite(
       const config = Object.assign({}, defaultConfig, {
         wrapKeyNamesSeparately: false,
         replaceKeyNamesWithIcons: false
-      });                                    
+      });
       const input = "Rename symbol | F12";
       const expected = "Rename symbol | <kbd>F12</kbd>";
+      const validKeys = validKeyNames;
+      const output: string = wrapKeyNamesWithKbdTags(input, config, validKeys);
+      expect(output.toString()).to.equal(expected);
+    });
+
+    test("Should wrap ctrl key with kbd tags.", () => {
+      const config = Object.assign({}, defaultConfig, {
+        wrapKeyNamesSeparately: false,
+        replaceKeyNamesWithIcons: true
+      });
+      const input = "- ctrl+r";
+      const expected = "- <kbd>^</kbd>+<kbd>R</kbd>";
       const validKeys = validKeyNames;
       const output: string = wrapKeyNamesWithKbdTags(input, config, validKeys);
       expect(output.toString()).to.equal(expected);
