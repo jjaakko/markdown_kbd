@@ -1,5 +1,4 @@
 import { Config } from "./types";
-import { startCase } from "lodash";
 import {
   getRegexForMatchingKeyNamesNotYetWrapped,
   getRegexMatchingKeyNames
@@ -87,20 +86,16 @@ export function wrapKeyNamesWithKbdTags_(
                   true
                 );
               }
-              const keyNameWithCorrectCase: string =  replacementsDone.toUpperCase().charAt(0) + replacementsDone.slice(1).toLowerCase();
-              // const keyNameWithCorrectCase: string = startCase(
-              //   replacementsDone.toLowerCase()
-              // );
 
-              // StartCase converts "F12" to "F1 2".
-              // Remove spaces from the string.
-              const spacesRemoved: string = keyNameWithCorrectCase.replace(
-                " ",
-                ""
-              );
+              const trimmed = replacementsDone.trim();
+              // Capitalize first letter of the keyname.
+              const keyNameWithCorrectCase: string =
+                trimmed.toUpperCase().charAt(0) +
+                trimmed.slice(1).toLowerCase();
+
               return wrapIndividualKeynameIfSettingsSaySo(
                 wrapKeyNamesSeparately,
-                spacesRemoved
+                keyNameWithCorrectCase
               );
             }
           );
