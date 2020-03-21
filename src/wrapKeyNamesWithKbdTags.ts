@@ -1,4 +1,5 @@
 import { Config } from "./types";
+import { startCase } from "lodash";
 import {
   getRegexForMatchingKeyNamesNotYetWrapped,
   getRegexMatchingKeyNames
@@ -43,7 +44,11 @@ export function wrapKeyNamesWithKbdTags(
  */
 export function wrapKeyNamesWithKbdTags_(
   stringWithKeyboardStrings: string,
-  { wrapKeyNamesSeparately, addSpacesAroundPlusSign, replaceKeyNamesWithIcons }: Config,
+  {
+    wrapKeyNamesSeparately,
+    addSpacesAroundPlusSign,
+    replaceKeyNamesWithIcons
+  }: Config,
   validKeys
 ): string {
   // Get pattern to match strings such as ' cmd+i ' or ' cmd+i.' or '-cmd+i '.
@@ -82,8 +87,11 @@ export function wrapKeyNamesWithKbdTags_(
                   true
                 );
               }
-              const keyNameWithCorrectCase: string =  replacementsDone.charAt(0) + replacementsDone.slice(1).toLowerCase();
-            
+              const keyNameWithCorrectCase: string =  replacementsDone.toUpperCase().charAt(0) + replacementsDone.slice(1).toLowerCase();
+              // const keyNameWithCorrectCase: string = startCase(
+              //   replacementsDone.toLowerCase()
+              // );
+
               // StartCase converts "F12" to "F1 2".
               // Remove spaces from the string.
               const spacesRemoved: string = keyNameWithCorrectCase.replace(
