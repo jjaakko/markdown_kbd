@@ -41,6 +41,7 @@ export const keyNamesToIcons = [
 // This needs to be done to replace 'ctrl' with '^' instead of it's escaped form '\\^'.
 export const keyNamesAndIconsForReplaceOperations = keyNamesToIcons.map(
   element => {
+    // Use property 'literalIcon' if it's denifed, otherwiser use property 'icon'.
     const object = {
       keyName: element.keyName,
       icon:
