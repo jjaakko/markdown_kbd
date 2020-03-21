@@ -177,7 +177,7 @@ suite(
 
     test("Should wrap ctrl key with kbd tags.", () => {
       const config = Object.assign({}, defaultConfig, {
-        wrapKeyNamesSeparately: false,
+        wrapKeyNamesSeparately: true,
         replaceKeyNamesWithIcons: true
       });
       const input = "- ctrl+r";
