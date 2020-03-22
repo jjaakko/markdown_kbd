@@ -7,12 +7,12 @@ import { wrapKeyNamesWithKbdTags } from "../../wrapKeyNamesWithKbdTags.js";
 import { Config } from "../../types";
 import * as regexPatternsModule from "../../regexPatterns.js";
 
-// Copied from https://github.com/NilsJPWerner/autoDocstring/blob/master/src/test/parse/docstring_is_closed.spec.ts
+// Do not truncate assertion errors
 chai.config.truncateThreshold = 0;
 const expect = chai.expect;
 
 suite(
-  "Test wrap key names functionality & wrap and replace functionality",
+  "Test wrap and replace functionality",
   () => {
     // Is this in the right place? Could this be defined in suiteSetup..?
     let defaultConfig: Config = {
@@ -24,6 +24,7 @@ suite(
     let stub = sinon.stub();
 
     suiteSetup(function() {
+      // Keep stubbing here for future use.
       // stub = sinon.stub(
       //   regexPatternsModule,
       //   "getRegexForMatchingKeyNamesNotYetWrapped"
@@ -39,7 +40,7 @@ suite(
       // stub.restore();
     });
 
-    test("should return key names wrapped with <kbd> tags", () => {
+    test("Should return key names wrapped with <kbd> tags", () => {
       const config = Object.assign({}, defaultConfig);
       const input: string = "ctrl+i";
       const validKeys = ["ctrl"];
@@ -49,7 +50,7 @@ suite(
       expect(output).to.equal(expected);
     });
 
-    test("should return key names wrapped in <kbd> tags and spaces between keynames removed", () => {
+    test("Should return key names wrapped in <kbd> tags and spaces between keynames removed", () => {
       const config = Object.assign({}, defaultConfig);
       const input: string = "ctrl + i";
       const validKeys = ["ctrl"];
@@ -58,7 +59,7 @@ suite(
       expect(output).to.equal(expected);
     });
 
-    test("should return key names wrapped in <kbd> tags and spaces added between key names", () => {
+    test("Should return key names wrapped in <kbd> tags and spaces added between key names", () => {
       const config = Object.assign({}, defaultConfig, {
         wrapKeyNamesSeparately: false,
         addSpacesAroundPlusSign: true,
@@ -71,7 +72,7 @@ suite(
       expect(output).to.equal(expected);
     });
 
-    test("should return all key names together, wrapped in one pair of <kbd> tags", () => {
+    test("Should return all key names together, wrapped in one pair of <kbd> tags", () => {
       const config = Object.assign({}, defaultConfig, {
         wrapKeyNamesSeparately: false,
         addSpacesAroundPlusSign: false,
@@ -84,23 +85,7 @@ suite(
       expect(output).to.equal(expected);
     });
 
-    // test("should not wrap non key names ab + cd", () => {
-    //   const config = Object.assign({}, defaultConfig);
-    //   const input: string = "ab+cd";
-    //   const output: string = wrapKeyNamesWithKbdTags(input, config);
-    //   const expected: string = "ab+cd";
-    //   expect(output).to.equal(expected);
-    // });
-
-    // // test("should not create nested <kbd> structures", () => {
-    // //   const config = Object.assign({}, defaultConfig);
-    // //   const input: string = "<kbd>ctrl+i</kbd>";
-    // //   const output: string = wrapKeyNamesWithKbdTags(input, config);
-    // //   const expected: string = "<kbd>ctrl+i</kbd>";
-    // //   expect(output).to.equal(expected);
-    // // });
-
-    test("Should wrap non-ascii characters such as ⌘", () => {
+    test("Should wrap unicode characters such as ⌘", () => {
       const config = Object.assign({}, defaultConfig);
       const input: string = "⌘+i";
       const validKeys = ["⌘"];
@@ -109,7 +94,7 @@ suite(
       expect(output).to.equal(expected);
     });
 
-    test("Should wrap key name combination in the middle of non ascii characters", () => {
+    test("Should wrap key name combination in the middle of unicode characters", () => {
       const config = Object.assign({}, defaultConfig);
       const input: string = "日本語 ⌘+i 日本語";
       const validKeys = ["⌘"];
@@ -151,7 +136,7 @@ suite(
       expect(output.toString()).to.equal(expected);
     });
 
-    test("Should wrap alt + arrUp etc.", () => {
+    test("Should wrap alt + arrUp", () => {
       const config = Object.assign({}, defaultConfig, {
         wrapKeyNamesSeparately: false,
         replaceKeyNamesWithIcons: false
@@ -175,7 +160,7 @@ suite(
       expect(output.toString()).to.equal(expected);
     });
 
-    test("Should wrap ctrl key with kbd tags.", () => {
+    test("Should wrap ctrl key and replace it with icon '^'.", () => {
       const config = Object.assign({}, defaultConfig, {
         wrapKeyNamesSeparately: true,
         replaceKeyNamesWithIcons: true

@@ -6,7 +6,7 @@ import {
   getRegexForMatchingKeyNamesNotYetWrapped,
 } from "../../regexPatterns.js";
 
-// Do not truncate assertion errors
+// Do not truncate assertion errors.
 chai.config.truncateThreshold = 0;
 const expect = chai.expect;
 

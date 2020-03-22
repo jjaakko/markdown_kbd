@@ -5,7 +5,7 @@ import "mocha";
 // import { wrapKeyNamesWithKbdTags } from "../../regex_manipulation/regex_manipulation.js";
 import { replaceKeynameWithIconOrViceVersa } from "../../replace.js";
 
-// Copied from https://github.com/NilsJPWerner/autoDocstring/blob/master/src/test/parse/docstring_is_closed.spec.ts
+// Do not truncate assertion errors.
 chai.config.truncateThreshold = 0;
 const expect = chai.expect;
 
@@ -17,7 +17,7 @@ suite("Test replacing key names with icons or vice versa", () => {
     expect(output).to.eql(expected);
   });
 
-  test("Replace key names at the end of a line.", () => {
+  test("Replace key names at the end of a sentence.", () => {
     const input: string = "- Lorem ipsum cmd";
     const output: string = replaceKeynameWithIconOrViceVersa(input, true);
     const expected: string = "- Lorem ipsum ⌘";
