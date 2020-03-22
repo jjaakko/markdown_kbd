@@ -4,7 +4,6 @@ import "mocha";
 
 import {
   getRegexForMatchingKeyNamesNotYetWrapped,
-  getRegexForMatchingKeyNamesWrappedAlready
 } from "../../regexPatterns.js";
 
 // Do not truncate assertion errors
