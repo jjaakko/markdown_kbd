@@ -1,6 +1,6 @@
 # VSCode Markdown Kbd
 
-Make keynames and keyname combinations (such as <kbd>Cmd+R</kbd> for example)  more visible in your markdown document by wrapping key names with `<kbd>` tags.
+Make keynames and keyname combinations (such as `Cmd+R` for example)  more visible in your markdown document by wrapping key names with `<kbd>` tags.
 
 ![Demo](images/markdown-kbd-demo.gif)
 
