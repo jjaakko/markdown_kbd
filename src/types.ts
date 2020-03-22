@@ -4,3 +4,9 @@ export type Config = {
   addSpacesAroundPlusSign: boolean;
   replaceKeyNamesWithIcons: boolean;
 };
+
+export type KeyNameInfo = {
+  keyName: string,
+  icon: string,
+  literalIcon?: string
+};

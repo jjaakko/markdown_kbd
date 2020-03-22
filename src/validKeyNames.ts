@@ -1,4 +1,6 @@
-export const keyNamesWithoutIcons = [
+import { KeyNameInfo } from "./types";
+
+export const keyNamesWithoutIcons: string[] = [
   "alt",
   "esc",
   "space",
@@ -21,7 +23,7 @@ export const keyNamesWithoutIcons = [
 // Keynames and icons as they should be presented in regular expressions.
 // Special characters like '^' have to be escaped.
 // See https://wincent.com/wiki/Unicode_representations_of_modifier_keys
-export const keyNamesToIcons = [
+export const keyNamesToIcons: KeyNameInfo[] = [
   { keyName: "cmd", icon: "⌘" },
   { keyName: "shift", icon: "⇧" },
   { keyName: "ctrl", icon: "\\^", literalIcon: "^" },
@@ -67,5 +69,3 @@ export const validKeyNames: string[] = [
   ...keyNamesWithoutIcons,
   ...keyNamesWithIconsPlusIcons
 ];
-
-console.log(validKeyNames);
