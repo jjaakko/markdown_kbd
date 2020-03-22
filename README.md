@@ -66,4 +66,4 @@ Note: settings *do not* affect retroactively but only from that point onwards.
 
 ## Caveats
 
-* Not all flavours of markdown support <kbd> elements.
+* Not all flavours of markdown support `<kbd>` elements.
