@@ -1,6 +1,11 @@
 # Change Log
 
-## [Unreleased]
+## [0.3] - 2020-03-22
+
+- Added separated commands for replacing key names with icons and vice versa.
+- Added commands targeting the selected area only
+- Removed commands affecting the whole document.
+- Extended list of supported key names and respective icons.
 
 - Strict mode & loose mode (wrap single key names as well)
 - Make replacing key names with icons a separate command?
