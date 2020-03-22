@@ -16,10 +16,11 @@ Make keynames and keyname combinations (such as `Cmd+R` for example)  more visib
 
 * Install the extension & reload developer window
 * Create new markdown file or open up a markdown file.
-* Insert keyname combination, such as <code>cmd+r</code>.
+* Insert text with a keyname combination, such as <code>cmd+r</code>.
+* Select text that contains keyname or keyname combination
 * If you created a new file, remember to save it with <code>.md</code> extension.
-* Open command panel by hitting <kbd>cmd+shift+p</kbd>.
-* Type markdown kbd and select <code>Wrap With Kbd Tags In Active Editor</code>.
+* Open command panel by hitting <kbd>⌘</kbd>+<kbd>⇧</kbd>+<kbd>P</kbd>.
+* Type markdown kbd and select <code>Wrap keynames in selected area with `<kbd>` tags.
 
 ## Currently supported keynames and respective icons
 
