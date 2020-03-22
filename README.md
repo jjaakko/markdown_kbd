@@ -14,7 +14,7 @@ Make keynames and keyname combinations (such as `Cmd+R` for example)  more visib
 
 ## How to use this extension
 
-* Install the extension & reload developer window
+* Install the extension & reload window
 * Create new markdown file or open up a markdown file.
 * Insert text with a keyname combination, such as <code>cmd+r</code>.
 * Select text that contains keyname or keyname combination
