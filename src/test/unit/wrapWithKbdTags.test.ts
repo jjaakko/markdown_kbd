@@ -2,254 +2,174 @@ import chai = require("chai");
 import sinon = require("sinon");
 import "mocha";
 
-import { wrapKeyNamesWithKbdTags } from "../../regex_manipulation/regex_manipulation.js";
+import { validKeyNames } from "../../validKeyNames";
+import { wrapKeyNamesWithKbdTags } from "../../wrapKeyNamesWithKbdTags.js";
 import { Config } from "../../types";
+import * as regexPatternsModule from "../../regexPatterns.js";
 
-// Copied from https://github.com/NilsJPWerner/autoDocstring/blob/master/src/test/parse/docstring_is_closed.spec.ts
+// Do not truncate assertion errors
 chai.config.truncateThreshold = 0;
 const expect = chai.expect;
 
-// Note: the default config is:
-// const config: Config = {
-//   wrapKeyNamesSeparately: true,
-//   addSpacesAroundPlusSign: false
-// };
-// If wrapKeyNamesWithKbdTags is passed `config`, the default config is used.
-
-suite("wrapKeyNamesWithKbdTags()", () => {
-  // const getRegexForMatchingKeyNameCombinations = () => {
-  //   const pattern = new RegExp(
-  //     /(?<!<kbd)(?:^|\W)(cmd|⌘|shift|ctrl|alt|enter|esc|tab|space|opt|⌥|F1|F2|F3|F4|F5|F6|F7|F8|F9|F10|F11|F12) ?\+ ?([a-z]|((cmd|⌘|shift|ctrl|alt|enter|esc|tab|space|opt|⌥|F1|F2|F3|F4|F5|F6|F7|F8|F9|F10|F11|F12)))( ?\+ ?([a-z]|((cmd|⌘|shift|ctrl|alt|enter|esc|tab|space|opt|⌥|F1|F2|F3|F4|F5|F6|F7|F8|F9|F10|F11|F12)))){0,5}(?:$|\W)(?!\/kbd>)/giu
-  //   );
-  //   return pattern;
-  // };
-
-  const getRegexForMatchingKeyNameCombinations = sinon.stub();
-  getRegexForMatchingKeyNameCombinations.returns(new RegExp(
-    /(?<!<kbd)(?:^|\W)(cmd|⌘|shift|ctrl|alt|enter|esc|tab|space|opt|⌥|F1|F2|F3|F4|F5|F6|F7|F8|F9|F10|F11|F12) ?\+ ?([a-z]|((cmd|⌘|shift|ctrl|alt|enter|esc|tab|space|opt|⌥|F1|F2|F3|F4|F5|F6|F7|F8|F9|F10|F11|F12)))( ?\+ ?([a-z]|((cmd|⌘|shift|ctrl|alt|enter|esc|tab|space|opt|⌥|F1|F2|F3|F4|F5|F6|F7|F8|F9|F10|F11|F12)))){0,5}(?:$|\W)(?!\/kbd>)/giu
-  ));
-
-  let config: Config = {
-    wrapKeyNamesSeparately: true,
-    addSpacesAroundPlusSign: false,
-    replaceWithIcons: false
-  };
-
-  test("should return key names wrapped with <kbd> tags", () => {
-    const input: string = "ctrl+i";
-    const output: string = wrapKeyNamesWithKbdTags(
-      input,
-      config,
-      getRegexForMatchingKeyNameCombinations
-    );
-    const expected: string = "<kbd>Ctrl</kbd>+<kbd>I</kbd>";
-    expect(output).to.equal(expected);
-  });
-
-  test("should return key names wrapped in <kbd> tags and spaces between keynames removed", () => {
-    const input: string = "ctrl + i";
-    const output: string = wrapKeyNamesWithKbdTags(
-      input,
-      config,
-      getRegexForMatchingKeyNameCombinations
-    );
-    const expected: string = "<kbd>Ctrl</kbd>+<kbd>I</kbd>";
-    expect(output).to.equal(expected);
-  });
-
-  test("should return key names wrapped in <kbd> tags and spaces added between key names", () => {
-    const input: string = "ctrl+i";
-    config = {
-      wrapKeyNamesSeparately: false,
-      addSpacesAroundPlusSign: true,
-      replaceWithIcons: false
-    };
-    const output: string = wrapKeyNamesWithKbdTags(
-      input,
-      config,
-      getRegexForMatchingKeyNameCombinations
-    );
-    const expected: string = "<kbd>Ctrl + I</kbd>";
-    expect(output).to.equal(expected);
-  });
-
-  test("should return all key names together, wrapped in one pair of <kbd> tags", () => {
-    const input: string = "ctrl+i";
-    config = {
-      wrapKeyNamesSeparately: false,
+suite(
+  "Test wrap and replace functionality",
+  () => {
+    // Is this in the right place? Could this be defined in suiteSetup..?
+    let defaultConfig: Config = {
+      wrapKeyNamesSeparately: true,
       addSpacesAroundPlusSign: false,
-      replaceWithIcons: false,
+      replaceKeyNamesWithIcons: false
     };
-    const output: string = wrapKeyNamesWithKbdTags(input, config, getRegexForMatchingKeyNameCombinations);
-    const expected: string = "<kbd>Ctrl+I</kbd>";
-    expect(output).to.equal(expected);
-  });
 
-  test("should return multiple occurences of key names wrapped in <kbd> tags", () => {
-    config.wrapKeyNamesSeparately = true;
-    const input: string = "ctrl+i, ctrl+shift+i and ctrl+shift+p";
-    const output: string = wrapKeyNamesWithKbdTags(
-      input,
-      config,
-      getRegexForMatchingKeyNameCombinations
-    );
-    const expected: string =
-      "<kbd>Ctrl</kbd>+<kbd>I</kbd>, <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>I</kbd> and <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>";
-    expect(output).to.equal(expected);
-  });
+    let stub = sinon.stub();
 
-  test("should return key names in the middle of a sentence wrapped with kbd tags", () => {
-    const input: string =
-      "A keyboard string ctrl+i in the middle of a sentence.";
-    const output: string = wrapKeyNamesWithKbdTags(
-      input,
-      config,
-      getRegexForMatchingKeyNameCombinations
-    );
-    const expected: string =
-      "A keyboard string <kbd>Ctrl</kbd>+<kbd>I</kbd> in the middle of a sentence.";
-    expect(output).to.equal(expected);
-  });
+    suiteSetup(function() {
+      // Keep stubbing here for future use.
+      // stub = sinon.stub(
+      //   regexPatternsModule,
+      //   "getRegexForMatchingKeyNamesNotYetWrapped"
+      // );
+      // stub.returns(
+      //   new RegExp(
+      //     /(?:^|\W)(ctrl|alt|opt|cmd|shift|⌥|⌘) ?\+ ?([a-z]|((ctrl|alt|opt|cmd|shift|⌥|⌘)))( ?\+ ?([a-z]|((ctrl|alt|opt|cmd|shift|⌥|⌘)))){0,5}(?:$|\W)/giu
+      //   )
+      // );
+    });
 
-  test("matching key names should be case insensitive", () => {
-    const input: string =
-      "A keyboard string CTRL+i in the middle of a sentence.";
-    const output: string = wrapKeyNamesWithKbdTags(
-      input,
-      config,
-      getRegexForMatchingKeyNameCombinations
-    );
-    const expected: string =
-      "A keyboard string <kbd>Ctrl</kbd>+<kbd>I</kbd> in the middle of a sentence.";
-    expect(output).to.equal(expected);
-  });
+    suiteTeardown(function() {
+      // stub.restore();
+    });
 
-  test("should return key names at the end of a sentence wrapped with kbd tags", () => {
-    const input: string =
-      "A keyboard string ctrl+i in the middle of a sentence.";
-    const output: string = wrapKeyNamesWithKbdTags(
-      input,
-      config,
-      getRegexForMatchingKeyNameCombinations
-    );
-    const expected: string =
-      "A keyboard string <kbd>Ctrl</kbd>+<kbd>I</kbd> in the middle of a sentence.";
-    expect(output).to.equal(expected);
-  });
+    test("Should return key names wrapped with <kbd> tags", () => {
+      const config = Object.assign({}, defaultConfig);
+      const input: string = "ctrl+i";
+      const validKeys = ["ctrl"];
+      const output: string = wrapKeyNamesWithKbdTags(input, config, validKeys);
+      const expected: string = "<kbd>Ctrl</kbd>+<kbd>I</kbd>";
 
-  test("should return multiple key names in the middle of a sentence wrapped with kbd tags", () => {
-    const input: string =
-      "A keyboard string ctrl+shift+i+w in the middle of a sentence.";
-    const output: string = wrapKeyNamesWithKbdTags(
-      input,
-      config,
-      getRegexForMatchingKeyNameCombinations
-    );
-    const expected: string =
-      "A keyboard string <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>I</kbd>+<kbd>W</kbd> in the middle of a sentence.";
-    expect(output).to.equal(expected);
-  });
+      expect(output).to.equal(expected);
+    });
 
-  test("should not wrap key names separated by minus sign", () => {
-    const input: string = "ctrl-i";
-    const output: string = wrapKeyNamesWithKbdTags(
-      input,
-      config,
-      getRegexForMatchingKeyNameCombinations
-    );
-    const expected: string = "ctrl-i";
-    expect(output).to.equal(expected);
-  });
+    test("Should return key names wrapped in <kbd> tags and spaces between keynames removed", () => {
+      const config = Object.assign({}, defaultConfig);
+      const input: string = "ctrl + i";
+      const validKeys = ["ctrl"];
+      const output: string = wrapKeyNamesWithKbdTags(input, config, validKeys);
+      const expected: string = "<kbd>Ctrl</kbd>+<kbd>I</kbd>";
+      expect(output).to.equal(expected);
+    });
 
-  test("should not wrap non key names ab + cd", () => {
-    const input: string = "ab+cd";
-    const output: string = wrapKeyNamesWithKbdTags(
-      input,
-      config,
-      getRegexForMatchingKeyNameCombinations
-    );
-    const expected: string = "ab+cd";
-    expect(output).to.equal(expected);
-  });
+    test("Should return key names wrapped in <kbd> tags and spaces added between key names", () => {
+      const config = Object.assign({}, defaultConfig, {
+        wrapKeyNamesSeparately: false,
+        addSpacesAroundPlusSign: true,
+        replaceKeyNamesWithIcons: false
+      });
+      const input: string = "ctrl+i";
+      const validKeys = ["ctrl"];
+      const output: string = wrapKeyNamesWithKbdTags(input, config, validKeys);
+      const expected: string = "<kbd>Ctrl + I</kbd>";
+      expect(output).to.equal(expected);
+    });
 
-  test("should not wrap word shift when the context is not a key name", () => {
-    const input: string = "hit ctrl+r to shift items to the right";
-    const output: string = wrapKeyNamesWithKbdTags(
-      input,
-      config,
-      getRegexForMatchingKeyNameCombinations
-    );
-    const expected: string =
-      "hit <kbd>Ctrl</kbd>+<kbd>R</kbd> to shift items to the right";
-    expect(output).to.equal(expected);
-  });
+    test("Should return all key names together, wrapped in one pair of <kbd> tags", () => {
+      const config = Object.assign({}, defaultConfig, {
+        wrapKeyNamesSeparately: false,
+        addSpacesAroundPlusSign: false,
+        replaceKeyNamesWithIcons: false
+      });
+      const input: string = "ctrl+i";
+      const validKeys = ["ctrl"];
+      const output: string = wrapKeyNamesWithKbdTags(input, config, validKeys);
+      const expected: string = "<kbd>Ctrl+I</kbd>";
+      expect(output).to.equal(expected);
+    });
 
-  test("should not create nested <kbd> structures", () => {
-    const input: string = "<kbd>ctrl+i</kbd>";
-    const output: string = wrapKeyNamesWithKbdTags(
-      input,
-      config,
-      getRegexForMatchingKeyNameCombinations
-    );
-    const expected: string = "<kbd>ctrl+i</kbd>";
-    expect(output).to.equal(expected);
-  });
+    test("Should wrap unicode characters such as ⌘", () => {
+      const config = Object.assign({}, defaultConfig);
+      const input: string = "⌘+i";
+      const validKeys = ["⌘"];
+      const output: string = wrapKeyNamesWithKbdTags(input, config, validKeys);
+      const expected: string = "<kbd>⌘</kbd>+<kbd>I</kbd>";
+      expect(output).to.equal(expected);
+    });
 
-  test("Should wrap non-ascii characters such as ⌘", () => {
-    const input: string = "⌘+i";
-    const output: string = wrapKeyNamesWithKbdTags(
-      input,
-      config,
-      getRegexForMatchingKeyNameCombinations
-    );
-    const expected: string = "<kbd>⌘</kbd>+<kbd>I</kbd>";
-    expect(output).to.equal(expected);
-  });
+    test("Should wrap key name combination in the middle of unicode characters", () => {
+      const config = Object.assign({}, defaultConfig);
+      const input: string = "日本語 ⌘+i 日本語";
+      const validKeys = ["⌘"];
+      const output: string = wrapKeyNamesWithKbdTags(input, config, validKeys);
+      const expected: string = "日本語 <kbd>⌘</kbd>+<kbd>I</kbd> 日本語";
+      expect(output.toString()).to.equal(expected);
+    });
 
-  test("Should wrap key name combination in the middle of non ascii characters", () => {
-    const input: string = "日本語 ⌘+i 日本語";
-    const output: string = wrapKeyNamesWithKbdTags(
-      input,
-      config,
-      getRegexForMatchingKeyNameCombinations
-    );
-    const expected: string = "日本語 <kbd>⌘</kbd>+<kbd>I</kbd> 日本語";
-    expect(output.toString()).to.equal(expected);
-  });
+    test("Should replace cmd with ⌘", () => {
+      const config = Object.assign({}, defaultConfig, {
+        replaceKeyNamesWithIcons: true
+      });
+      const input: string = "cmd+i";
+      const validKeys = ["cmd"];
+      const output: string = wrapKeyNamesWithKbdTags(input, config, validKeys);
+      const expected: string = "<kbd>⌘</kbd>+<kbd>I</kbd>";
+      expect(output.toString()).to.equal(expected);
+    });
 
-  test("Should replace cmd with ⌘", () => {
-    config.replaceWithIcons = true;
-    const input: string = "cmd+i";
-    const output: string = wrapKeyNamesWithKbdTags(
-      input,
-      config,
-      getRegexForMatchingKeyNameCombinations
-    );
-    const expected: string = "<kbd>⌘</kbd>+<kbd>I</kbd>";
-    expect(output.toString()).to.equal(expected);
-  });
+    test("Should replace opt with ⌥", () => {
+      const config = Object.assign({}, defaultConfig, {
+        replaceKeyNamesWithIcons: true
+      });
+      const input: string = "opt+i";
+      const validKeys = ["opt"];
+      const output: string = wrapKeyNamesWithKbdTags(input, config, validKeys);
+      const expected: string = "<kbd>⌥</kbd>+<kbd>I</kbd>";
+      expect(output.toString()).to.equal(expected);
+    });
 
-  test("Should replace opt with ⌥", () => {
-    config.replaceWithIcons = true;
-    const input: string = "opt+i";
-    const output: string = wrapKeyNamesWithKbdTags(
-      input,
-      config,
-      getRegexForMatchingKeyNameCombinations
-    );
-    const expected: string = "<kbd>⌥</kbd>+<kbd>I</kbd>";
-    expect(output.toString()).to.equal(expected);
-  });
+    test("Should not replace alt with ⌥", () => {
+      const config = Object.assign({}, defaultConfig, {
+        replaceKeyNamesWithIcons: true
+      });
+      const input: string = "alt+i";
+      const validKeys = ["alt"];
+      const output: string = wrapKeyNamesWithKbdTags(input, config, validKeys);
+      const expected: string = "<kbd>Alt</kbd>+<kbd>I</kbd>";
+      expect(output.toString()).to.equal(expected);
+    });
 
-  test("Should not replace alt with ⌥", () => {
-    config.replaceWithIcons = true;
-    const input: string = "alt+i";
-    const output: string = wrapKeyNamesWithKbdTags(
-      input,
-      config,
-      getRegexForMatchingKeyNameCombinations
-    );
-    const expected: string = "<kbd>Alt</kbd>+<kbd>I</kbd>";
-    expect(output.toString()).to.equal(expected);
-  });
-});
+    test("Should wrap alt + arrUp", () => {
+      const config = Object.assign({}, defaultConfig, {
+        wrapKeyNamesSeparately: false,
+        replaceKeyNamesWithIcons: false
+      });
+      const input = "|  alt + arrUp or alt + arrDown.";
+      const expected = "|  <kbd>Alt+Arrup</kbd> or <kbd>Alt+Arrdown</kbd>.";
+      const validKeys = ["alt", "arrUp", "arrDown"];
+      const output: string = wrapKeyNamesWithKbdTags(input, config, validKeys);
+      expect(output.toString()).to.equal(expected);
+    });
+
+    test("Should wrap F12", () => {
+      const config = Object.assign({}, defaultConfig, {
+        wrapKeyNamesSeparately: false,
+        replaceKeyNamesWithIcons: false
+      });
+      const input = "Rename symbol | F12";
+      const expected = "Rename symbol | <kbd>F12</kbd>";
+      const validKeys = validKeyNames;
+      const output: string = wrapKeyNamesWithKbdTags(input, config, validKeys);
+      expect(output.toString()).to.equal(expected);
+    });
+
+    test("Should wrap ctrl key and replace it with icon '^'.", () => {
+      const config = Object.assign({}, defaultConfig, {
+        wrapKeyNamesSeparately: true,
+        replaceKeyNamesWithIcons: true
+      });
+      const input = "- ctrl+r";
+      const expected = "- <kbd>^</kbd>+<kbd>R</kbd>";
+      const validKeys = validKeyNames;
+      const output: string = wrapKeyNamesWithKbdTags(input, config, validKeys);
+      expect(output.toString()).to.equal(expected);
+    });
+  }
+);

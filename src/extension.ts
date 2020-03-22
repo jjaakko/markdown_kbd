@@ -3,9 +3,11 @@
 import * as vscode from "vscode";
 import {
   wrapKeyNamesInSelectionWithKbdTags,
-  wrapKeyNamesInActiveEditorWithKbdTags
-} from "./wrapKeyNamesWithKbdTags";
-import { stripKbdTagsFromActiveDocument } from "./stripKbdTags";
+} from "./vsWrap";
+import {
+  stripKbdTagsFromSelectedArea
+} from "./vsRemoveKbdTags";
+import { vsReplace } from "./vsReplace";
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -15,16 +17,32 @@ export function activate(context: vscode.ExtensionContext) {
       commandName: "markdownKbd.wrapWithKbdTagsInSelectedArea",
       callbackFunction: wrapKeyNamesInSelectionWithKbdTags
     },
+    // {
+    //   commandName: "markdownKbd.wrapWithKbdTagsInActiveEditor",
+    //   callbackFunction: wrapKeyNamesInActiveEditorWithKbdTags
+    // },
+    // {
+    //   commandName: "markdownKbd.stripKbdTagsFromActiveEditor",
+    //   callbackFunction: stripKbdTagsFromActiveDocument
+    // },
     {
-      commandName: "markdownKbd.wrapWithKbdTagsInActiveEditor",
-      callbackFunction: wrapKeyNamesInActiveEditorWithKbdTags
+      commandName: "markdownKbd.stripKbdTagsFromSelectedArea",
+      callbackFunction: stripKbdTagsFromSelectedArea
     },
     {
-      commandName: "markdownKbd.stripKbdTagsFromActiveEditor",
-      callbackFunction: stripKbdTagsFromActiveDocument
+      commandName: "markdownKbd.replaceKeyNamesWithIcons",
+      callbackFunction: () => {
+        return vsReplace(true);
+      }
+    },
+    {
+      commandName: "markdownKbd.replaceIconsWithKeyNames",
+      callbackFunction: () => {
+        return vsReplace(false);
+      }
     }
   ];
-  for (let {commandName, callbackFunction} of commands) {
+  for (let { commandName, callbackFunction } of commands) {
     let disposable = vscode.commands.registerCommand(
       commandName,
       callbackFunction
