@@ -57,14 +57,19 @@ F9 |
 
 ## Extension Settings
 
+Use settings to adjust how wrapping is done:
+
+![Settings](images/settings.gif)
+
 This extension contributes the following settings:
 
 * <code>markdownKbd.wrapKeyNamesSeparately</code>: control whether to wrap individual key names or the key combination as a whole
 * <code>markdownKbd.addSpacesAroundPlusSign</code>: control whether to use space around the plus sign, <kbd>Cmd+r</kbd> vs <kbd>Cmd + r</kbd>
 * <code>markdownKbd.replaceKeynamesWithIcons</code>: control whether to replace ctrl, cmd, opt and shift with icons (^, ⌘, ⌥, ⇧).
 
-Note: settings *do not* affect retroactively but only from that point onwards.
+Note: settings *do not* affect retroactively. To wrap text with new settings, use the `Wrap keynames in selected area with <kbd> tags` command again.
 
 ## Caveats
 
 * Not all flavours of markdown support `<kbd>` elements.
+
